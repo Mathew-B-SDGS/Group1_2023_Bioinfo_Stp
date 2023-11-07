@@ -1,8 +1,8 @@
 import requests
-
+# Specifying the API endpoint URL
 api_url = "https://panelapp.genomicsengland.co.uk/api/v1/panels"
 
-
+# Make a request to the API to retrieve the panels, with an filtering criteria
 class ApiCallsSadie:
 
     def get_panels_for_genomic_test(self):
@@ -13,7 +13,7 @@ class ApiCallsSadie:
         else:
             print("Failed to retrieve panels")
             return None
-
+# Specify the ID of the panel you want to retrieve, which looks into the relevant disorders to get the R number
     def return_specific_panel(self, test_code):
         panels = self.get_panels_for_genomic_test()
         for x in panels['results']:
