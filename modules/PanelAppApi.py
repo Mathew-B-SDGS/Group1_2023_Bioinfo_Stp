@@ -15,10 +15,14 @@ class ApiCallsSadie:
             return None
 
     def return_specific_panel(self, test_code):
-        for x in self.get_panels_for_genomic_test['results']:
+        panels = self.get_panels_for_genomic_test()
+        for x in panels['results']:
             if test_code in x['relevant_disorders']:
                 return x
 
+#code = 'R169'
+#obj = ApiCallsSadie()
+#print(obj.return_specific_panel(code))
 
 # specific_panel = return_specific_panel('R169')
 # print(specific_panel)
