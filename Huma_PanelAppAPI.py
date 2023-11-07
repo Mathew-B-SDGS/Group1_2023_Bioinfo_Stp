@@ -38,3 +38,11 @@ if specific_panel:
     print(json.dumps(specific_panel, indent=2))
 else:
     print(f"Panel with ID {specific_panel_id} not found.")
+
+# Define function for specific relevant disease and # Retrieve the relevant disorders, to get the R number
+def get_relevant_disorders(panels,specific_panel_id, relevant_disorders)
+    if relevant_disorders in panels:
+        return relevant_disorders
+    return None
+
+
