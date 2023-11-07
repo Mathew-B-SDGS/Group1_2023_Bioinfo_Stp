@@ -6,3 +6,9 @@
 - Huma
 - Sadie 
 - Mathew 
+
+### Instuctions to run the code
+``
+python3 main.py rnumber --outputfile
+```
+

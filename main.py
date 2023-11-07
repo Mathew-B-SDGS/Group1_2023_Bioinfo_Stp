@@ -5,7 +5,7 @@ import click
 @click.option("--writefile", is_flag=True, help="Output to file")
 def query_api(rnumber, writefile):
     """Access the Panel-APP Api."""
-    return_value= function(rnumber)
+    #return_value= function(rnumber)
 
     click.echo('Accessing the Panel-APP Api...')
     click.echo(f'Rnumber: {rnumber}')
