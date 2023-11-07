@@ -17,9 +17,13 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <h1>Search for a panel</h1>
-        <a href="/test">Test data</a>
+        <hr>
+        <p>Enter a <b>R-number</b> value to search for a panel</p>
+        <p>Or use the buttons below to search for test data or all panels</p>
+        <hr>
+        <a href="/testapi">Test data</a>
         <a href="/allpanels">All Panels</a>
-        <a href="/test/1">Test Panel</a>
+        <hr>
         <form method="POST" action="/search">
             <label for="search_input">Enter a R-number value: </label>
             <input type="text" id="search_input" name="r" required>
