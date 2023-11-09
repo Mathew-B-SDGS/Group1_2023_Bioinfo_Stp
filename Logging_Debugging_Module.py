@@ -21,14 +21,18 @@ logger.addHandler(file_handler)
 logger.addHandler(output_handler)
 
 # Have a logger in place
-def complex_function():
+def some_function():
     try: 
-        result = perform_complex_function()
+        result = perform_some_function()
 except Exception as e:
 # Log an error message if an exception occurs
 logger.error ("An error has occurred")
 
 if __name__ == "__main__": 
     logger.debug("Start of application")
-    complex_function()
+    some_function()
     logger.debug ("Exiting the application")
+    logger.info("Welcome Message")
+    logger.warning("Warning error message")
+    logger.error("This is an Erorr message")
+    logger.critical("Critical Message")
