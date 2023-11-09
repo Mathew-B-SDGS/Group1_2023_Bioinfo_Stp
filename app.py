@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session , Response
 from modules import ParserExcel, HGNC_converter , api_query_R
 
 app = Flask(__name__)
@@ -48,6 +48,16 @@ def gene_list():
         return filtered_api_result
     else:
         return "<p>No 'r' parameter found in the session</p>"
+
+@app.route("/search/download", endpoint="download")
+def download_file():
+    r_number = session.get('r')
+    file_content = "function_to_get_file_content(r_number) "
+    response = Response(file_content, content_type='text/plain')
+    file_name = f'generated_file_{r_number}.bed'
+    response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
+
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
