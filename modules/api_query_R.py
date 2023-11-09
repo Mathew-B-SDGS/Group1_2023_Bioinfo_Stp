@@ -4,6 +4,9 @@ api_url = "https://panelapp.genomicsengland.co.uk/api/v1/panels/"
 
 
 class ApiCallsbyR():
+    """
+    Run code by calling class with R test code and desired reference genome
+    """
     def __init__(self, test_code, ref_genome):
         self.test_code = test_code
         self.ref_genome = ref_genome
