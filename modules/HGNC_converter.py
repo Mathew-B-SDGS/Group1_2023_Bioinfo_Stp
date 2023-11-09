@@ -14,8 +14,8 @@ class HgncConverter ():
         try:
             self.ensembl_id = self.hgnc_id_api_query(
             )["response"]["docs"][0]["ensembl_gene_id"]
-        except KeyError:
-            print("HGNC ID not found")
+        except Exception as e:
+            print(e)
         finally:
             self.completed = True
 

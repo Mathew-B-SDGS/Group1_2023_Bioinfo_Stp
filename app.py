@@ -1,10 +1,9 @@
-from flask import Flask, request, render_template
-from modules import test_api, PanelAppApi, ParserExcel
-
+from flask import Flask, request, render_template, session
+from modules import test_api, PanelAppApi, ParserExcel, HGNC_converter
 
 app = Flask(__name__)
 app.debug = True
-
+app.secret_key = "GoldSilverMoonStreamWoodpecker"
 
 @app.route("/")
 def hello_world():
@@ -15,6 +14,7 @@ def hello_world():
 def test_data():
     if request.method == 'POST':
         r_number = request.form.get('r')
+        session['r'] = r_number
         if r_number:
             # Create an object instance of the ApiCallsSadie class and fetch the panel
             api_calls_object = PanelAppApi.ApiCallsSadie(r_number)
@@ -51,6 +51,24 @@ def all_panels():
     api_calls_sadie = PanelAppApi.ApiCallsSadie()
     return api_calls_sadie.get_panels_for_genomic_test()
 
+@app.route("/search/genelist",methods=['GET'], endpoint="genelist")
+def gene_list():
+    r_number = session.get('r')
+    if r_number is not None:
+        api_calls_object = PanelAppApi.ApiCallsSadie(r_number)
+        filtered_api_result = api_calls_object.extract_genes_hgnc()
+        list_of_genes = []
+        return filtered_api_result
+        # if filtered_api_result:
+        #     for i in filtered_api_result:
+        #         HGNC_converter_object = HGNC_converter.HgncConverter(i)
+        #         json_object = HGNC_converter_object.ensembl_id_api_query(full_transcript_list=False)
+        #         list_of_genes.append(HGNC_converter_object)
+        #         del HGNC_converter_object, json_object
+        #     return list_of_genes
+        # return render_template("genelist.html", r=r_number, genes=list_of_genes)
+    else:
+        return "<p>No 'r' parameter found in the session</p>"
 
 if __name__ == "__main__":
     app.run(debug=True)
