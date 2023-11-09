@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, session
-from modules import test_api, PanelAppApi, ParserExcel, HGNC_converter
+from modules import test_api, PanelAppApi, ParserExcel, HGNC_converter , api_query_R
 
 app = Flask(__name__)
 app.debug = True
@@ -17,8 +17,8 @@ def test_data():
         session['r'] = r_number
         if r_number:
             # Create an object instance of the ApiCallsSadie class and fetch the panel
-            api_calls_object = PanelAppApi.ApiCallsSadie(r_number)
-            filtered_api_result = api_calls_object.return_specific_panel()
+            api_calls_object = api_query_R.ApiCallsbyR(r_number)
+            filtered_api_result = api_calls_object.get_panel_for_genomic_test()
 
             # Create an object instance of the Parser class and parse the excel file
             Parsed_results_object = ParserExcel.Parser()
@@ -55,10 +55,10 @@ def all_panels():
 def gene_list():
     r_number = session.get('r')
     if r_number is not None:
-        api_calls_object = PanelAppApi.ApiCallsSadie(r_number)
+        api_calls_object = api_query_R.ApiCallsbyR(r_number)
         filtered_api_result = api_calls_object.extract_genes_hgnc()
-        list_of_genes = []
         return filtered_api_result
+        # list_of_genes = []
         # if filtered_api_result:
         #     for i in filtered_api_result:
         #         HGNC_converter_object = HGNC_converter.HgncConverter(i)
