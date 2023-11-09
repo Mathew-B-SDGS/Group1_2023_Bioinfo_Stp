@@ -2,7 +2,8 @@ import requests
 
 api_url = "https://panelapp.genomicsengland.co.uk/api/v1/panels"
 
-class ApiCallsSadie:
+
+class ApiCallsSadie():
     def __init__(self, test_code):
         self.test_code = test_code
       
@@ -11,10 +12,10 @@ class ApiCallsSadie:
         endpoint = f"{api_url}/signedoff/"
         response = requests.get(endpoint)
         if response.status_code == 200:
-           return response.json()
+            return response.json()
         else:
-           print("Failed to retrieve panels")
-           return None
+            print("Failed to retrieve panels")
+            return None
 
     def return_specific_panel(self):
         # Specify the test R code associated with the panel
@@ -49,7 +50,10 @@ class ApiCallsSadie:
         gene_list = []
         gene_information = self.query_api_for_genes()
         for gene in gene_information['results']:
-            gene_list.append(gene['gene_data']['hgnc_id']
-   
- 
+            gene_list.append(gene['gene_data']['hgnc_id'])
+        return gene_list
+
+
+
+
 
