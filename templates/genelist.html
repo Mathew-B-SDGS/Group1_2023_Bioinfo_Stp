@@ -13,23 +13,26 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        <h1>Search Results {{results.r}}</h1>
-        <h4> <i>Return to <a href="/">Search</a> </i> </h4>
-        <hr>
-        <h2> <a href="/search/genelist">View genelist </a> </h2>
-        <hr>
-        <p> find below the API results and Natinal Genomic Test Directory</p>
-        <p> {{results.df.to_html() | safe}}</p>
-        <hr>
-        <br>
-        <ul>
-            {% for key, value in results.r_json.items() %}
-                <li><strong>{{ key }}:</strong> {{ value }}</li>
-            {% endfor %}
-        </ul>
-        <br>
-        <p> {{results.r_json | tojson}}</p>        
-
+        {{r}}
+        <table>
+            <thead>
+              <tr>
+                <th>Header 1</th>
+                <th>Header 2</th>
+                <!-- Add more headers as needed -->
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in genes %}
+                <tr>
+                  <td>{{ item.key1 }}</td>
+                  <td>{{ item.key2 }}</td>
+                  <!-- Add more columns as needed, using keys from your dictionary -->
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
         <script src="" async defer></script>
     </body>
 </html>
