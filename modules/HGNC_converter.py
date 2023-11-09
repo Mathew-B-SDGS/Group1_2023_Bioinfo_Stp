@@ -51,6 +51,11 @@ class HgncConverter ():
         else:
             raise Exception(f"API request failed for {repr(self)} with status code {response.status_code}")
 
-obj_test = HgncConverter("4982")  # Create an instance
-result = obj_test.ensembl_id_api_query()  # Call the method on the instance
-print(result)
+if __name__ == "__main__":
+
+    obj_test = HgncConverter("4982")  # Create an instance
+    result = obj_test.ensembl_id_api_query(full_transcript_list=True)  # Call the method on the instanc
+
+    # print(result)
+    for i in result["Transcript"]:
+        print(i["Parent"])
