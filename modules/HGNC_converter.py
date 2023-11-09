@@ -6,7 +6,8 @@ class HgncConverter ():
 
     def __init__(self, hgnc_input):
         try:
-            self.hgnc = int(hgnc_input.strip("HGNC:"))
+            self.hgnc = str(int(hgnc_input.strip("HGNC:")))
+            
         except ValueError:
             print("HGNC ID must be an integer")
 
@@ -36,21 +37,20 @@ class HgncConverter ():
         """ querey the HGNC api for the ensembl ID
         if full_transcript_list is set to True, the function will return a list of all the transcripts for the gene
         """
-        url = "https://rest.ensembl.org"
+        url = "https://rest.ensembl.org/lookup/id/"
 
         #check to see if Whole expansion is wanted. If so, add the expand=1 to the url
         if full_transcript_list:
-            target_url = url + self.hgnc +"?expand=1"
+            target_url = url + self.ensembl_id +"?expand=1"
         else:
-            target_url = url + self.hgnc + "?"
+            target_url = url + self.ensembl_id + "?"
         
         response = requests.get(target_url, headers={ "Content-Type" : "application/json"})
         if response.status_code == 200:
             return response.json()
         else:
-            return "error"
+            raise Exception(f"API request failed for {repr(self)} with status code {response.status_code}")
 
-
-obj_test = HgncConverter("4982").hgnc_id_api_query()
-print(obj_test["response"]["docs"][0]["ensembl_gene_id"])
-obj_test.ensembl_id_api_query()
+obj_test = HgncConverter("4982")  # Create an instance
+result = obj_test.ensembl_id_api_query()  # Call the method on the instance
+print(result)
