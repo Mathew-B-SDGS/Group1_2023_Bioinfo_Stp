@@ -52,11 +52,21 @@ def gene_list():
 @app.route("/search/download", endpoint="download")
 def download_file():
     r_number = session.get('r')
-    file_content = "function_to_get_file_content(r_number) "
-    response = Response(file_content, content_type='text/plain')
+    obj_for_bed = api_query_R.ApiCallsbyR(r_number, 'GRCh37')
+    file_content = obj_for_bed.create_bed_file_iterable()
+    response = Response(file_content, content_type='text/plain');
     file_name = f'generated_file_{r_number}.bed'
     response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
+    return response
 
+@app.route("/search/download", endpoint="download150")
+def download_file():
+    r_number = session.get('r')
+    obj_for_bed = api_query_R.ApiCallsbyR(r_number, 'GRCh37')
+    file_content = obj_for_bed.create_bed_file_iterable()
+    response = Response(file_content, content_type='text/plain');
+    file_name = f'generated_file_{r_number}.bed'
+    response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
     return response
 
 if __name__ == "__main__":

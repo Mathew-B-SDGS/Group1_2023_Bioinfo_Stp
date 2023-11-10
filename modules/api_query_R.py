@@ -7,7 +7,7 @@ class ApiCallsbyR():
     """
     Run code by calling class with R test code and desired reference genome
     """
-    def __init__(self, test_code, ref_genome):
+    def __init__(self, test_code, ref_genome = 'GRCh37'):
         self.test_code = test_code
         self.ref_genome = ref_genome
 
@@ -69,3 +69,15 @@ class ApiCallsbyR():
                 file.write(f"{chrom}\t{start}\t{end}\n")
 
         print(f'BED file "{filename}" has been created successfully.')
+
+    def create_bed_file_iterable(self):
+     # Specify the filename for the BED file
+        test_code = self.test_code 
+        # Writing to the BED file
+        list_of_coords_for_bed = []
+        for row in self.create_bed_structure():
+            chrom, start, end = row
+            line = chrom + "\t" + start + "\t" + end + "\n"
+            list_of_coords_for_bed.append(line)
+        return list_of_coords_for_bed
+
