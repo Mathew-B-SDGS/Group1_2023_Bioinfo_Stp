@@ -17,7 +17,27 @@
         <h4> <i>Return to <a href="/">Search</a> </i> </h4>
         <hr>
         <h2> <a href="/search/genelist">View genelist </a> </h2>
-        <h2><a href="/search/download"><b> Download</b></a></h2>
+        <p> To download a BED file for the selectd panel please enter your search parameters
+            and click the download button below. <br>
+            Choose between <b>GRCh37 or GRCh38</b> reference genome, and choose between 
+            additonal upstream downstream transcripts 150bp or the standard transcripts. <br>
+            The BED file will be downloaded to your local machine.
+        </p>
+        <form action="/search/download" method="post">
+            <label for="action">Choose an Action:</label>
+            <select name="action" id="action">
+                <option value="GRCh37">GRCh37</option>
+                <option value="GRCh38"> GRCh38</option>
+            </select>
+            <!-- choose between 150 or normal -->
+            <label for="version">Choose a version:</label>
+            <select name="version" id="version">
+                <option value="150">+/-150BP</option>
+                <option value="normal"> standard</option>
+            <br>
+            <input type="submit" value="Download Bed File">
+        </form>
+        <!-- <h2><a href="/search/download"><b> Download</b></a></h2> -->
         <hr>
         <p> find below the API results and Natinal Genomic Test Directory</p>
         <p> {{results.df.to_html() | safe}}</p>
