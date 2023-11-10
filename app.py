@@ -49,29 +49,36 @@ def gene_list():
     else:
         return "<p>No 'r' parameter found in the session</p>"
 
-@app.route("/search/download", endpoint="download")
+@app.route("/search/download", endpoint="download", methods=['POST'])
 def download_file():
     r_number = session.get('r')
-    obj_for_bed = api_query_R.ApiCallsbyR(r_number, 'GRCh37')
-    file_content = obj_for_bed.create_bed_file_iterable()
+    selected_action = request.form['action']
+    selected_lenght = request.form['version']
+    obj_for_bed = api_query_R.ApiCallsbyR(r_number, selected_action)
+    if selected_lenght == '150':
+        file_content = obj_for_bed.create_bed_file_iterable_150()
+    else:
+        file_content = obj_for_bed.create_bed_file_iterable()
     response = Response(file_content, content_type='text/plain');
     file_name = f'generated_file_{r_number}.bed'
     response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
     return response
 
-@app.route("/search/download", endpoint="download150")
-def download_file():
-    r_number = session.get('r')
-    obj_for_bed = api_query_R.ApiCallsbyR(r_number, 'GRCh37')
-    file_content = obj_for_bed.create_bed_file_iterable()
-    response = Response(file_content, content_type='text/plain');
-    file_name = f'generated_file_{r_number}.bed'
-    response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
-    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
 
+
+# @app.route("/search/download150", endpoint="download150", methods=['POST'])
+# def download_file():
+#     selected_action = request.form['action']
+#     r_number = session.get('r')
+#     obj_for_bed = api_query_R.ApiCallsbyR(r_number, selected_action)
+#     file_content = obj_for_bed.create_bed_file_iterable_150()
+#     response = Response(file_content, content_type='text/plain');
+#     file_name = f'generated_file_{r_number}.bed'
+#     response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
+#     return response
 
 # @app.route("/test", methods=['GET', 'POST'])
 # def test_data():
