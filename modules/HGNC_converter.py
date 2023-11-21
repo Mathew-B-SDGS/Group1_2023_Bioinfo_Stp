@@ -7,7 +7,7 @@ class HgncConverter ():
     def __init__(self, hgnc_input):
         try:
             self.hgnc = str(int(hgnc_input.strip("HGNC:")))
-            
+
         except ValueError:
             print("HGNC ID must be an integer")
 
@@ -33,29 +33,85 @@ class HgncConverter ():
         else:
             return "error"
 
-    def ensembl_id_api_query(self, full_transcript_list=False):
-        """ querey the HGNC api for the ensembl ID
-        if full_transcript_list is set to True, the function will return a list of all the transcripts for the gene
+    def ensembl_id_api_query(self):
+        """ query the HGNC api for the ensembl ID
+        ***removed*** - if full_transcript_list is set to True, the function will return a list of all the transcripts for the gene
         """
         url = "https://rest.ensembl.org/lookup/id/"
 
-        #check to see if Whole expansion is wanted. If so, add the expand=1 to the url
-        if full_transcript_list:
-            target_url = url + self.ensembl_id +"?expand=1"
-        else:
-            target_url = url + self.ensembl_id + "?"
-        
-        response = requests.get(target_url, headers={ "Content-Type" : "application/json"})
+        target_url = url + self.ensembl_id + "?expand=1"
+
+        print(target_url)
+        response = requests.get(target_url, headers={
+                                "Content-Type": "application/json"})
         if response.status_code == 200:
             return response.json()
         else:
-            raise Exception(f"API request failed for {repr(self)} with status code {response.status_code}")
+            raise Exception(
+                f"API request failed for {repr(self)} with status code {response.status_code}")
+
+    def ens_transcript_list(self):
+        transcript_list = []
+        ensembl_data = self.ensembl_id_api_query()
+        for transcript in ensembl_data['Transcript']:
+            transcript_list.append(transcript['id'])
+        return transcript_list
+
+# the below class depends on the result of transcript selection from the list output from ens_transcript_list
+# it also uses the output of function ensembl_api_query
+# not sure if this is better to be one class or two as they interact.
+
+
+class CreateBed():
+    """
+    Takes selected  ENS transcript and creates bedfile
+    The input is the transcript id which the user will need to select from ens_transcript_list output
+    The user will also need to select if they want padded exons or whole transcript
+
+    """
+
+    def __init__(self, transcript_id, padded_exons=True):
+        self.transcript_id = transcript_id
+        self.ensembl_data = obj_test.ensembl_id_api_query()
+        self.padded_exons = padded_exons
+
+    def get_transcript_coord(self):
+        list_of_coords_for_bed = []
+        chrom_start_end = []
+        for transcript in self.ensembl_data['Transcript']:
+            if transcript['id'] == self.transcript_id:
+                if self.padded_exons:
+                    for exon in transcript['Exon']:
+                        chrom_start_end.append(exon['seq_region_name'])
+                        chrom_start_end.append(exon['start'])
+                        chrom_start_end.append(exon['end'])
+                        list_of_coords_for_bed.append(chrom_start_end)
+                        chrom_start_end = []
+                else:
+                    chrom_start_end.append(transcript['seq_region_name'])
+                    chrom_start_end.append(transcript['start'])
+                    chrom_start_end.append(transcript['end'])
+                    list_of_coords_for_bed.append(chrom_start_end)
+
+                return list_of_coords_for_bed
+
+    def create_bed_file_iterable(self):
+        # Specify the filename for the BED file
+        # Writing to the BED file
+        list_of_coords_for_bed = []
+        for row in self.get_transcript_coord():
+            chrom, start, end = row
+            if self.padded_exons:
+                start = int(start) - 50
+                end = int(end) + 50
+            line = str(chrom) + "\t" + str(start) + "\t" + str(end) + "\n"
+            list_of_coords_for_bed.append(line)
+        return list_of_coords_for_bed
+
 
 if __name__ == "__main__":
 
     obj_test = HgncConverter("4982")  # Create an instance
-    result = obj_test.ensembl_id_api_query(full_transcript_list=True)  # Call the method on the instanc
-
-    # print(result)
-    for i in result["Transcript"]:
-        print(i["Parent"])
+    second_obj = CreateBed('ENST00000536185', False)
+    result = obj_test.ens_transcript_list()  # Call the method on the instanc
+    result_2 = second_obj.create_bed_file_iterable()

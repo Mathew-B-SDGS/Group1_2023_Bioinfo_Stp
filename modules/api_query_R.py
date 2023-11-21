@@ -7,9 +7,11 @@ class ApiCallsbyR():
     """
     Run code by calling class with R test code and desired reference genome
     """
-    def __init__(self, test_code, ref_genome = 'GRCh37'):
+
+    def __init__(self, test_code, ref_genome='GRCh37', add_50=True):
         self.test_code = test_code
         self.ref_genome = ref_genome
+        self.add_50 = add_50
 
     # Make a request to the API to retrieve all panels
     def get_panel_for_genomic_test(self):
@@ -31,6 +33,11 @@ class ApiCallsbyR():
             gene_list.append(gene['gene_data']['hgnc_id'])
         return gene_list
 
+
+
+
+"""
+The below code is replaced by class CreateBed in HGNC_converter script
     def filter_coordinates(self):
         gene_locations = []
         gene_information = self.get_panel_for_genomic_test()
@@ -57,10 +64,10 @@ class ApiCallsbyR():
             list_of_coords_for_bed.append(chrom_start_end)
             chrom_start_end = []
         return list_of_coords_for_bed
-    
+
     def create_bed_file(self):
         # Specify the filename for the BED file
-        test_code = self.test_code 
+        test_code = self.test_code
         filename = test_code + '.bed'
         # Writing to the BED file
         with open(filename, mode='w') as file:
@@ -71,13 +78,26 @@ class ApiCallsbyR():
         print(f'BED file "{filename}" has been created successfully.')
 
     def create_bed_file_iterable(self):
-     # Specify the filename for the BED file
-        test_code = self.test_code 
+        # Specify the filename for the BED file
         # Writing to the BED file
         list_of_coords_for_bed = []
         for row in self.create_bed_structure():
             chrom, start, end = row
+            if self.add_50:
+                start = str(int(start) - 50)
+                end = str(int(end) + 50)
             line = chrom + "\t" + start + "\t" + end + "\n"
             list_of_coords_for_bed.append(line)
         return list_of_coords_for_bed
+
+"""
+
+test_code = 'R169'
+ref_genome = 'GRCh38'
+obj = ApiCallsbyR(test_code, ref_genome)
+
+# print(obj.get_panel_for_genomic_test())
+
+print(obj.create_bed_structure())
+
 
