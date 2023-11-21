@@ -72,7 +72,7 @@ class CreateBed():
 
     def __init__(self, transcript_id, padded_exons=True):
         self.transcript_id = transcript_id
-        self.ensembl_data = obj_test.ensembl_id_api_query()
+        self.ensembl_data = obj_test.ensembl_id_api_query() #information from the last class which I don't think is a good way to structure this
         self.padded_exons = padded_exons
 
     def get_transcript_coord(self):
