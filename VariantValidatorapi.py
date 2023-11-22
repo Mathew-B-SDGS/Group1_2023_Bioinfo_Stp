@@ -1,23 +1,38 @@
-import requests 
+import requests
 
-base_url = "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A4982/mane_select/refseq/GRCh37?content-type=application%2Fjson"
+def get_refseq_transcripts(genome_build, variant_description, select_transcripts="all"):
+    base_url = "https://rest.variantvalidator.org/VariantValidator/variantvalidator/GRCh37/"
 
-class VariantValidatorRefseq:
-    def get_refseq_transcripts(self):
-# HTTP GET request to the API, using gene_id as a parameter
-        endpoint = f"{base_url}"
-        response = requests.get(endpoint)
- # If request successful, json will return data on ref seq transcripts
-        if response.status_code == 200:
-           return response.json()
+    # Specify parameters in the URL path
+    url = f"{base_url}?genome_build={genome_build}&variant_description={variant_description}&select_transcripts={select_transcripts}"
+
+    # Set the headers to indicate that you want JSON response
+    headers = {"content-type": "application/json"}
+
+    # Make the request to Variant Validator API
+    response = requests.get(url, headers=headers)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        data = response.json()
+
+        # Extract and print RefSeq transcripts
+        transcripts = data.get('transcripts', [])
+        if transcripts:
+            print("RefSeq Transcripts:")
+            for transcript in transcripts:
+                transcript_id = transcript.get('transcript_id', 'N/A')
+                gene_symbol = transcript.get('gene_symbol', 'N/A')
+                print(f"Transcript ID: {transcript_id}, Gene: {gene_symbol}")
         else:
-         print("Failed to retrieve refseq transcripts")
-         return None
+            print("No RefSeq transcripts found for the gene/transcript.")
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
 
-def return_mane_select_transcripts(self, HGVS):
-    refseq_transcripts = self.get_refseq_transcripts()
-    
+if __name__ == "__main__":
+    # Example parameters (replace with your own)
+    genome_build = "GRCh37"
+    variant_description = "NM_007294.4"
+    select_transcripts = "refseq_select"  # Change this based on your preference
 
-
-
-
+    get_refseq_transcripts(genome_build, variant_description, select_transcripts)
