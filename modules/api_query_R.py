@@ -1,20 +1,19 @@
 import requests
 
-api_url = "https://panelapp.genomicsengland.co.uk/api/v1/panels/"
 
-
-class ApiCallsbyR():
+class RcodeToBed():
     """
     Run code by calling class with R test code and desired reference genome
     """
 
-    def __init__(self, test_code, ref_genome='GRCh37', add_50=True):
+    def __init__(self, test_code, ref_genome='GRCh37', padded_exons = True):
         self.test_code = test_code
         self.ref_genome = ref_genome
-        self.add_50 = add_50
+        self.padded_exons = padded_exons
 
     # Make a request to the API to retrieve all panels
     def get_panel_for_genomic_test(self):
+        api_url = "https://panelapp.genomicsengland.co.uk/api/v1/panels/"
         endpoint = f"{api_url}"
         endpoint_2 = endpoint + self.test_code + '/'
         print(endpoint_2)
@@ -32,72 +31,42 @@ class ApiCallsbyR():
         for gene in gene_information['genes']:
             gene_list.append(gene['gene_data']['hgnc_id'])
         return gene_list
-
-
-
-
-"""
-The below code is replaced by class CreateBed in HGNC_converter script
-    def filter_coordinates(self):
-        gene_locations = []
-        gene_information = self.get_panel_for_genomic_test()
-        for gene in gene_information['genes']:
-            if self.ref_genome == 'GRCh37':
-                gene_locations.append(
-                    gene['gene_data']['ensembl_genes']['GRch37']['82']['location'])
-            elif self.ref_genome == 'GRCh38':
-                gene_locations.append(
-                    gene['gene_data']['ensembl_genes']['GRch38']['90']['location'])
-            else:
-                print('Incorrect reference genome selected')
-        return gene_locations
-
-    def create_bed_structure(self):
+    
+    def get_coord_mane_select_trans(self):
+        gene_list = self.extract_genes_hgnc()
         chrom_start_end = []
         list_of_coords_for_bed = []
-        list_of_coords = self.filter_coordinates()
-        for coordinate in list_of_coords:
-            chrom_start_end.append(coordinate.split(':')[0])
-            start = coordinate.split(':')[1]
-            chrom_start_end.append(start.split('-')[0])
-            chrom_start_end.append(coordinate.split('-')[1])
-            list_of_coords_for_bed.append(chrom_start_end)
-            chrom_start_end = []
-        return list_of_coords_for_bed
-
-    def create_bed_file(self):
-        # Specify the filename for the BED file
-        test_code = self.test_code
-        filename = test_code + '.bed'
-        # Writing to the BED file
-        with open(filename, mode='w') as file:
-            for row in self.create_bed_structure():
-                chrom, start, end = row
-                file.write(f"{chrom}\t{start}\t{end}\n")
-
-        print(f'BED file "{filename}" has been created successfully.')
-
+        for gene in gene_list:
+            vv_url = f"https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/{gene}/mane/ensembl/{self.ref_genome}"
+            print(vv_url)
+            response = requests.get(vv_url)
+            if response.status_code == 200:
+                gene_info = response.json()
+                mane_select = (list(gene_info[0]['transcripts'][0]['genomic_spans'].keys()))[0]
+                transcript_data = gene_info[0]['transcripts'][0]['genomic_spans'][mane_select]
+                if self.padded_exons:
+                    for exon in transcript_data['exon_structure']:
+                        chrom_start_end.append(gene_info[0]['transcripts'][0]['annotations']['chromosome'])
+                        chrom_start_end.append(exon['genomic_start'])
+                        chrom_start_end.append(exon['genomic_end'])
+                        list_of_coords_for_bed.append(chrom_start_end)
+                        chrom_start_end = []
+                else:
+                    chrom_start_end.append(gene_info[0]['transcripts'][0]['annotations']['chromosome'])
+                    chrom_start_end.append(transcript_data['start_position'])
+                    chrom_start_end.append(transcript_data['end_position'])
+                    list_of_coords_for_bed.append(chrom_start_end)
+            return list_of_coords_for_bed
+        
     def create_bed_file_iterable(self):
         # Specify the filename for the BED file
         # Writing to the BED file
-        list_of_coords_for_bed = []
-        for row in self.create_bed_structure():
+        coords_for_bed = []
+        for row in self.get_coord_mane_select_trans():
             chrom, start, end = row
-            if self.add_50:
-                start = str(int(start) - 50)
-                end = str(int(end) + 50)
-            line = chrom + "\t" + start + "\t" + end + "\n"
-            list_of_coords_for_bed.append(line)
-        return list_of_coords_for_bed
-
-"""
-
-test_code = 'R169'
-ref_genome = 'GRCh38'
-obj = ApiCallsbyR(test_code, ref_genome)
-
-# print(obj.get_panel_for_genomic_test())
-
-print(obj.create_bed_structure())
-
-
+            if self.padded_exons:
+                start = int(start) - 50
+                end = int(end) + 50
+            line = str(chrom) + "\t" + str(start) + "\t" + str(end) + "\n"
+            coords_for_bed.append(line)
+        return coords_for_bed
