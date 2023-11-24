@@ -1,0 +1,8 @@
+{
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "editor.rulers": [79]
+
+}
