@@ -61,7 +61,7 @@ def create_app(test_config=None):
     def test_data():
         """
         This is the search page route, it renders the search.html template with
-        the search form and a link to the home page using the Data submitted in the form
+        the search form and a link to the home page using the Data
         """
         if request.method == 'POST':
             r_code = request.form.get('r')
@@ -102,17 +102,30 @@ def create_app(test_config=None):
     @app.route("/search/download", endpoint="download", methods=['POST'])
     def download_file():
         r_code = session.get('r')
-        selected_action = request.form['action']
+        # choose between GRCh38 or GRCh37
+        selected_build = request.form['build']
+        # choose between Mane Select transcript coordinates or padded exon coordinates
         selected_lenght = request.form['version']
-        obj_for_bed = bedmake.RCodeToBedFile(r_code, padded_exons)
-        if selected_lenght == '150':
-            file_content = obj_for_bed.create_bed_file_iterable_150()
-        else:
+        # add an additonal 15bp padding to the exons
+        selected_padding = request.form['padding']
+
+        obj_for_bed = bedmake.RCodeToBedFile(
+            test_code=r_code,
+            padded_exons=selected_lenght,
+            GRCh38=selected_build)
+
+        if selected_padding == 'True':
             file_content = obj_for_bed.create_bed_file_iterable()
-        response = Response(file_content, content_type='text/plain')
-        file_name = f'generated_file_{r_code}.bed'
-        response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
-        return response
+        else:
+            file_content = obj_for_bed.get_coords_for_bed()
+
+        try:
+            response = Response(file_content, content_type='text/plain')
+            file_name = f'generated_file_{r_code}.bed'
+            response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
+            return response
+        except Exception as e:
+            return f"Error: {str(e)}"
 
     """
     all blueprints are to be found below this comment
@@ -121,7 +134,6 @@ def create_app(test_config=None):
     - the database blueprint
     - the Auth blueprint (not yet implemented)
     """
-
     # install the database blueprint into the module
     app.register_blueprint(database_blueprint.bp, url_prefix='/database')
     app.register_blueprint(user_auth.bp, url_prefix='/auth')

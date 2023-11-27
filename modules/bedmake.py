@@ -31,7 +31,7 @@ class RCodeToBedFile():
         else:
             print(f"Failed to retrieve panels querying the PanelApp API using"
                   f" {self.test_code}")
-            sys.exit(1)
+            # sys.exit(1)
 
     def extract_genes_hgnc(self):
         """Extracts list of gene HGNC IDs from the PanelApp API query
@@ -48,50 +48,70 @@ class RCodeToBedFile():
         then exon coordinates will be retrieved else Mane Select transcript
         coordinates will be retrieved.
         """
-        gene_list = self.extract_genes_hgnc()
-        chrom_start_end = []
-        all_gene_coords = []
-        transcript_coords = []
-        for gene in gene_list:
-            vv_url = (f"https://rest.variantvalidator.org/VariantValidator/"
-                      f"tools/gene2transcripts_v2/{gene}/mane/refseq/"
-                      f"{self.ref_genome}")
-            response = requests.get(vv_url)
-            if response.status_code == 200:
-                gene_info = response.json()
-                mane_select = (list(gene_info[0]['transcripts'][0]
-                                    ['genomic_spans'].keys()))[0]
-                transcript_data = (gene_info[0]['transcripts'][0]
-                                   ['genomic_spans'][mane_select])
-                if self.padded_exons:
-                    for exon in transcript_data['exon_structure']:
+        try:
+            gene_list = self.extract_genes_hgnc()
+            chrom_start_end = []
+            all_gene_coords = []
+            transcript_coords = []
+            for gene in gene_list:
+                vv_url = (f"https://rest.variantvalidator.org/VariantValidator/"
+                          f"tools/gene2transcripts_v2/{gene}/mane/refseq/"
+                          f"{self.ref_genome}")
+                response = requests.get(vv_url)
+                if response.status_code == 200:
+                    gene_info = response.json()
+                    mane_select = (list(gene_info[0]['transcripts'][0]
+                                        ['genomic_spans'].keys()))[0]
+                    transcript_data = (gene_info[0]['transcripts'][0]
+                                       ['genomic_spans'][mane_select])
+                    if self.padded_exons == 'True':
+                        for exon in transcript_data['exon_structure']:
+                            chrom_start_end.append(gene_info[0]['transcripts'][0]
+                                                   ['annotations']['chromosome'])
+                            chrom_start_end.append(exon['genomic_start'])
+                            chrom_start_end.append(exon['genomic_end'])
+                            transcript_coords.append(chrom_start_end)
+                            chrom_start_end = []
+                    else:
                         chrom_start_end.append(gene_info[0]['transcripts'][0]
                                                ['annotations']['chromosome'])
-                        chrom_start_end.append(exon['genomic_start'])
-                        chrom_start_end.append(exon['genomic_end'])
+                        chrom_start_end.append(
+                            transcript_data['start_position'])
+                        chrom_start_end.append(transcript_data['end_position'])
                         transcript_coords.append(chrom_start_end)
-                        chrom_start_end = []
+                    all_gene_coords.append(transcript_coords)
                 else:
-                    chrom_start_end.append(gene_info[0]['transcripts'][0]
-                                           ['annotations']['chromosome'])
-                    chrom_start_end.append(transcript_data['start_position'])
-                    chrom_start_end.append(transcript_data['end_position'])
-                    transcript_coords.append(chrom_start_end)
-                all_gene_coords.append(transcript_coords)
-            else:
-                print("Failed to recieve response from Variant Validator API")
-                sys.exit(1)
-        return all_gene_coords
+                    print("Failed to recieve response from Variant Validator API")
+                    # sys.exit(1)
+            return all_gene_coords
+        except Exception as e:
+            return self.__str__() + f"\nError: {str(e)}"
 
     def create_bed_file_iterable(self):
         """Creates a bedfile structure for front end creation of bedfile"""
         coords_for_bed = []
-        for gene in self.get_coords_for_bed():
-            for entity in gene:
-                chrom, start, end = entity
-                if self.padded_exons:
-                    start = int(start) - 50
-                    end = int(end) + 50
-                line = str(chrom) + "\t" + str(start) + "\t" + str(end) + "\n"
-                coords_for_bed.append(line)
-        return coords_for_bed
+        try:
+            for gene in self.get_coords_for_bed():
+                for entity in gene:
+                    chrom, start, end = entity
+                    if self.padded_exons:
+                        start = int(start) - 50
+                        end = int(end) + 50
+                    line = str(chrom) + "\t" + str(start) + \
+                        "\t" + str(end) + "\n"
+                    coords_for_bed.append(line)
+            return coords_for_bed
+        except Exception as e:
+            return self.__str__() + f"\nError: {str(e)}"
+
+    def __repr__(self):
+        return f"RCodeToBedFile(test_code={self.test_code}, GRCh38={self.ref_genome}, padded_exons={self.padded_exons})"
+
+    def __str__(self):
+        return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.padded_exons}"
+
+
+obj = RCodeToBedFile(test_code="R41", GRCh38=True, padded_exons=False)
+
+print(obj.get_coords_for_bed())
+print(obj.create_bed_file_iterable())
