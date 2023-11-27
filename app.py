@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, session , Response
-from modules import ParserExcel, HGNC_converter , bedmaker
+from modules import ParserExcel, bedmake
+from modules.deprecated import depreciated_HGNC_converter
 
 app = Flask(__name__)
 app.debug = True
@@ -17,7 +18,7 @@ def test_data():
         session['r'] = r_code
         if r_code:
             # Create an object instance of the ApiCallsSadie class and fetch the panel
-            api_calls_object = bedmaker.RCodeToBedFile(r_code)
+            api_calls_object = bedmake.RCodeToBedFile(r_code)
             filtered_api_result = api_calls_object.get_panel_for_genomic_test()
 
             # Create an object instance of the Parser class and parse the excel file
@@ -43,7 +44,7 @@ def test_data():
 def gene_list():
     r_code = session.get('r')
     if r_code is not None:
-        api_calls_object = bedmaker.RCodeToBedFile(r_code)
+        api_calls_object = bedmake.RCodeToBedFile(r_code)
         filtered_api_result = api_calls_object.extract_genes_hgnc()
         return filtered_api_result
     else:
@@ -54,7 +55,7 @@ def download_file():
     r_code = session.get('r')
     selected_action = request.form['action']
     selected_lenght = request.form['version']
-    obj_for_bed = bedmaker.RCodeToBedFile(r_code, padded_exons)
+    obj_for_bed = bedmake.RCodeToBedFile(r_code, padded_exons)
     if selected_lenght == '150':
         file_content = obj_for_bed.create_bed_file_iterable_150()
     else:
