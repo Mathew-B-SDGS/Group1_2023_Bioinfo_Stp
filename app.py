@@ -51,10 +51,18 @@ def create_app(test_config=None):
 
     @app.route("/")
     def hello_world():
+        """
+        This is the home page route, it renders the home.html template with 
+        links to search an R number and to go to the database or Auth pages 
+        """
         return render_template("home.html")
 
     @app.route("/search", methods=['POST'])
     def test_data():
+        """
+        This is the search page route, it renders the search.html template with
+        the search form and a link to the home page using the Data submitted in the form
+        """
         if request.method == 'POST':
             r_code = request.form.get('r')
             session['r'] = r_code

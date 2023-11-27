@@ -1,36 +1,79 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Home Page</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        <h1>Search for a panel</h1>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home Page</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Search For a Panel</h1>
         <hr>
-        <p>Enter a <b>R-number</b> value to search for a panel</p>
-        <p>Or use the buttons below to search for test data or all panels</p>
+        <div class="box">
+            <p>Enter a <b>R-number</b> value to search for a panel</p>
+            <p>Or use the buttons below to search for test data or all panels</p>
+        </div>
         <hr>
-        <a href="/testapi">Test data</a>
-        <a href="/allpanels">All Panels</a>
+        <div class="box">
+            <a href="/auth">Login</a>
+            <a href="/database">Search database</a>
+        </div>
         <hr>
-        <form method="POST" action="/search">
-            <label for="search_input">Enter a R-number value: </label>
-            <input type="text" id="search_input" name="r" required>
-            <button type="submit">Search</button>
-        </form>
-        
-        
-        <script src="" async defer></script>
-    </body>
+        <div class="box">
+            <form method="POST" action="/search">
+                <label for="search_input">Enter an R-number value: </label>
+                <input type="text" id="search_input" name="r" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="container">
+            <h2>Understanding R-Numbers and Gene Panels</h2>
+
+            <p>The National Genomic Test Directory serves as a cataloge of the
+                various genomic tests availble on the NHS. (in england)</p>
+
+            <p>R-Numbers are unique identifiers assigned to individual genomic tests within
+                the directory. These alphanumeric codes help streamline the search process, making it efficient for
+                healthcare professionals and researchers to locate specific tests.</p>
+
+            <p>Search for a specific R-number to find the associated gene panel, and Download the availble Bed File</p>
+
+            <p>Please find a link to the National Genomic Test Directory below:</p>
+            <a href="https://www.england.nhs.uk/publication/national-genomic-test-directories/">NHS England</a>
+
+
+            <hr>
+
+            <p class="text-muted"> <i>For more information, visit the
+                    <a href=https://panelapp.genomicsengland.co.uk>Panel App</a>,
+                    or check out this projects Github availble at <a
+                        href="https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp">STP projects</a> </i>
+            </p>
+
+
+
+        </div>
+    </div>
+
+    <script src="" async defer></script>
+</body>
+
 </html>
