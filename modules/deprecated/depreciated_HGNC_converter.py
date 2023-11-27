@@ -56,7 +56,8 @@ class HgncConverter ():
         for transcript in ensembl_data['Transcript']:
             transcript_list.append(transcript['id'])
         return transcript_list
-
+    
+    
 # the below class depends on the result of transcript selection from the list output from ens_transcript_list
 # it also uses the output of function ensembl_api_query
 # not sure if this is better to be one class or two as they interact.
@@ -115,3 +116,13 @@ if __name__ == "__main__":
     second_obj = CreateBed('ENST00000536185', False)
     result = obj_test.ens_transcript_list()  # Call the method on the instanc
     result_2 = second_obj.create_bed_file_iterable()
+
+"""
+test_code = 'R129'
+ref_genome = 'GRCh38'
+obj = ApiCallsbyR(test_code, ref_genome)
+
+# print(obj.get_panel_for_genomic_test())
+
+print(obj.create_bed_file_iterable())
+"""

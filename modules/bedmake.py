@@ -16,7 +16,7 @@ class RCodeToBedFile():
             self.ref_genome = 'GRCh38'
         else:
             self.ref_genome = 'GRCh37'
-        self.test_code = test_code
+        self.test_code = test_code.upper()
         self.padded_exons = padded_exons
 
     def get_panel_for_genomic_test(self):
