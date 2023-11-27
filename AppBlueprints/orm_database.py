@@ -33,9 +33,23 @@ class User(Base):
     user_id: Mapped[int] = mapped_column(
         primary_key=True, autoincrement=True, unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(30), unique=True)
+    password: Mapped[str] = mapped_column(String(30), nullable=False)
 
     def __repr__(self):
         return f"user_id: {self.user_id}, username: {self.username}"
+
+
+class ClinicalIndication(Base):
+    __tablename__ = "clinical_indication"
+
+    clinical_indication_id: Mapped[str] = mapped_column(primary_key=True)
+    test_id: Mapped[str] = mapped_column(primary_key=True)
+    clinical_indication: Mapped[str] = mapped_column(String)
+    target_genes: Mapped[str] = mapped_column(String)
+    test_method: Mapped[str] = mapped_column(String)
+    commissioning_category: Mapped[str] = mapped_column(String)
+    specialist_test_group: Mapped[str] = mapped_column(String)
+    changes_since_april_2023_publication: Mapped[str] = mapped_column(String)
 
 
 Base.metadata.create_all(engine)
