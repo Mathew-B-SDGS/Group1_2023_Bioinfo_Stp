@@ -46,3 +46,37 @@
 #     # Create an instance of the ApiCallsSadie class
 #     api_calls_sadie = PanelAppApi.ApiCallsSadie()
 #     return api_calls_sadie.get_panels_for_genomic_test()
+
+
+# def pad_bed_files(self):
+#     """Creates a bedfile structure for front end creation of bedfile"""
+#     coords_for_bed = []
+#     try:
+#         for gene in self.get_coords_for_bed():
+#             for entity in gene:
+#                 chrom, start, end = entity
+#                 if self.include_exon == 'True':
+#                     start = int(start) - 50
+#                     end = int(end) + 50
+#                 line = str(chrom) + "\t" + str(start) + \
+#                     "\t" + str(end) + "\n"
+#                 coords_for_bed.append(line)
+#         return coords_for_bed
+#     except Exception as e:
+#         return self.__str__() + f"\nError: {str(e)}"
+
+# def create_bed_file_iterable_modified(self):
+#     """Creates a bedfile structure for front end creation of bedfile"""
+#     coords_for_bed = []
+#     try:
+#         for gene in self.get_coords_for_bed():
+#             for entity in gene:
+#                 chrom, start, end = entity
+#                 if self.include_exon == 'True':
+#                     # Ensure start is non-negative
+#                     start = max(0, int(start) - 50)
+#                     end = int(end) + 50
+#                 coords_for_bed.append([str(chrom), int(start), int(end)])
+#         return coords_for_bed
+#     except Exception as e:
+#         return self.__str__() + f"\nError: {str(e)}"

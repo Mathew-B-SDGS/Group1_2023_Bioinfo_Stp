@@ -105,22 +105,22 @@ def create_app(test_config=None):
         # choose between GRCh38 or GRCh37
         selected_build = request.form['build']
         # choose between Mane Select transcript coordinates or padded exon coordinates
-        selected_lenght = request.form['version']
+        exon_or_transcript = request.form['version']
         # add an additonal 15bp padding to the exons
         selected_padding = request.form['padding']
 
         obj_for_bed = bedmake.RCodeToBedFile(
             test_code=r_code,
-            padded_exons=selected_lenght,
+            include_exon=exon_or_transcript,
             GRCh38=selected_build)
 
-        if selected_padding == 'True':
-            file_content = obj_for_bed.create_bed_file_iterable()
-        else:
-            file_content = obj_for_bed.get_coords_for_bed()
+        output_content = obj_for_bed.create_string_bed()
+
+        # file_content_bytes = file_content_string.encode('utf-8')
 
         try:
-            response = Response(file_content, content_type='text/plain')
+            response = Response(
+                output_content, content_type='text/plain; charset=utf-8')
             file_name = f'generated_file_{r_code}.bed'
             response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
             return response
