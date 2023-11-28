@@ -28,7 +28,8 @@
         <h1>Search For a Panel</h1>
         <hr>
         <div class="box">
-            <p>Enter a <b>R-number</b> value to search for a panel</p>
+            <p>Enter an <b>R test code</b>(e.g. R169) from the National Genomic
+            Test Directory to search for a panel</p>
             <p>Or use the buttons below to search for test data or all panels</p>
         </div>
         <hr>
@@ -39,7 +40,7 @@
         <hr>
         <div class="box">
             <form method="POST" action="/search">
-                <label for="search_input">Enter an R-number value: </label>
+                <label for="search_input">Enter an R code (e.g. R21): </label>
                 <input type="text" id="search_input" name="r" required>
                 <button type="submit">Search</button>
             </form>
@@ -50,21 +51,22 @@
             <p>The National Genomic Test Directory serves as a cataloge of the
                 various genomic tests availble on the NHS. (in england)</p>
 
-            <p>R-Numbers are unique identifiers assigned to individual genomic tests within
+            <p>R-codes are unique identifiers assigned to individual genomic tests within
                 the directory. These alphanumeric codes help streamline the search process, making it efficient for
                 healthcare professionals and researchers to locate specific tests.</p>
 
-            <p>Search for a specific R-number to find the associated gene panel, and Download the availble Bed File</p>
+            <p>Search for a specific R-code to find the associated gene panel, and download the associated Bed File</p>
 
-            <p>Please find a link to the National Genomic Test Directory below:</p>
+            <p>Please find a link to the latest version of the National Genomic Test Directory:</p>
             <a href="https://www.england.nhs.uk/publication/national-genomic-test-directories/">NHS England</a>
+            <p>Please note version 5.1 (June 2023) is being used in this software</p>
 
 
             <hr>
 
             <p class="text-muted"> <i>For more information, visit the
                     <a href=https://panelapp.genomicsengland.co.uk>Panel App</a>,
-                    or check out this projects Github availble at <a
+                    or check out this project's Github availble at <a
                         href="https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp">STP projects</a> </i>
             </p>
 
