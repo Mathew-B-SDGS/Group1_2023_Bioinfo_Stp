@@ -13,18 +13,18 @@ class RCodeToBedFile():
     def __init__(
         self,
         test_code,
-        GRCh38=True,
+        ref_genome,
         include_exon=True,
         padded=True
     ):
 
-        if GRCh38:
-            self.ref_genome = 'GRCh38'
-        else:
-            self.ref_genome = 'GRCh37'
+        self.ref_genome = ref_genome
         self.test_code = test_code.upper()
-        self.include_exon = include_exon
-        if padded == 'True' or padded == True:
+        if include_exon == 'Exon':
+            self.include_exon = True
+        else:
+            self.include_exon = False
+        if padded == 'True' or padded is True:
             self.padded = True
         else:
             self.padded = False
@@ -87,7 +87,7 @@ class RCodeToBedFile():
                                        ['genomic_spans'][mane_select])
                     # If padded_exons=True, then retrieve exon coordinates
                     # else retrieve Mane Select transcript coordinates
-                    if self.include_exon == 'True':
+                    if self.include_exon is True:
                         for exon in transcript_data['exon_structure']:
                             chrom_start_end.append(gene_info[0]['transcripts'][0]
                                                    ['annotations']['chromosome'])
@@ -136,7 +136,7 @@ class RCodeToBedFile():
             if self.padded:
                 input_bed_file = self.pad_bed_files()
             else:
-                input_bed_file = self.get_coords_for_bed()
+                input_bed_file = self.get_coords_for_bed()[0]
             bed_file_string = ""
             for line in input_bed_file:
                 bed_file_string += f"{line[0]}\t{line[1]}\t{line[2]}\n"
@@ -146,7 +146,17 @@ class RCodeToBedFile():
             raise
 
     def __repr__(self):
-        return f"RCodeToBedFile(test_code={self.test_code}, GRCh38={self.ref_genome}, padded_exons={self.include_exon})"
+        return f"RCodeToBedFile(test_code={self.test_code}, ref_genome={self.ref_genome}, padded_exons={self.include_exon})"
 
     def __str__(self):
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
+
+"""
+test_code = 'R169'
+ref_genome = 'GRCh38'
+
+obj = RCodeToBedFile(test_code, ref_genome, padded=True, include_exon='Exons')
+print(obj.pad_bed_files())
+
+print(obj.get_coords_for_bed())
+"""

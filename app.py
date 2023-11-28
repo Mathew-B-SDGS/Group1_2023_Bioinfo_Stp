@@ -68,7 +68,7 @@ def create_app(test_config=None):
             session['r'] = r_code
             if r_code:
                 # Create an object instance of the ApiCallsSadie class and fetch the panel
-                api_calls_object = bedmake.RCodeToBedFile(r_code)
+                api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
                 filtered_api_result = api_calls_object.get_panel_for_genomic_test()
 
                 # Create an object instance of the Parser class and parse the excel file
@@ -93,7 +93,7 @@ def create_app(test_config=None):
     def gene_list():
         r_code = session.get('r')
         if r_code is not None:
-            api_calls_object = bedmake.RCodeToBedFile(r_code)
+            api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
             filtered_api_result = api_calls_object.extract_genes_hgnc()
             return filtered_api_result
         else:
@@ -104,15 +104,16 @@ def create_app(test_config=None):
         r_code = session.get('r')
         # choose between GRCh38 or GRCh37
         selected_build = request.form['build']
-        # choose between Mane Select transcript coordinates or padded exon coordinates
+        # choose between Mane Select transcript coordinates or exon coordinates
         exon_or_transcript = request.form['version']
-        # add an additonal 15bp padding to the exons
+        # add an additonal 50bp padding to the exons or transcript
         selected_padding = request.form['padding']
 
         obj_for_bed = bedmake.RCodeToBedFile(
             test_code=r_code,
             include_exon=exon_or_transcript,
-            GRCh38=selected_build)
+            ref_genome=selected_build,
+            padded=selected_padding)
 
         output_content = obj_for_bed.create_string_bed()
 
