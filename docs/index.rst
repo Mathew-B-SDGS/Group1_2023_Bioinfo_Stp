@@ -12,9 +12,9 @@ Welcome to Group1_2023_Bioinfo_Stp's documentation!
 
 
 
-Indices and tables
+Contents
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+* :ref:`Installation`
+* :ref:`Support`
+* :ref:`Search`
