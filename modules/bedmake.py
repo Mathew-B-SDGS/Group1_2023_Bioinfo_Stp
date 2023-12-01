@@ -14,7 +14,7 @@ class RCodeToBedFile():
         self,
         test_code,
         ref_genome,
-        include_exon=True,
+        include_exon,
         padded=True
     ):
 
@@ -151,3 +151,8 @@ class RCodeToBedFile():
 
     def __str__(self):
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
+
+
+obj = RCodeToBedFile(test_code='R201', ref_genome='GRCh38',
+                     include_exon='Exon', padded=False)
+print(obj.get_panel_for_genomic_test())
