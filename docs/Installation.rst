@@ -1,7 +1,10 @@
 Installation
 ===================================================
-At the command line: 
-python3 app.py 
-
-Or, if you have pip installed: 
-pip install 
+- At the command line: 
+```
+python3 main.py rnumber --outputfile
+```
+- To Spin up the Flask App run the following command
+```
+flask --app app run 
+```
