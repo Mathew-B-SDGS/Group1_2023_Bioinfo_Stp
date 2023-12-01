@@ -25,22 +25,22 @@
 
 <body>
     <div class="container">
-        <h1>Search For a Panel</h1>
+        <h1>Welcome to Panel Searcher!</h1>
         <hr>
         <div class="box">
-            <p>Enter a <b>R-number</b> value to search for a panel</p>
-            <p>Or use the buttons below to search for test data or all panels</p>
+            <p>Enter an <b>R-code</b> to find the associated panel</p>
+            <p>Or explore the patient-panel database using the button below</p>
         </div>
         <hr>
         <div class="box">
-            <a href="/auth">Login</a>
-            <a href="/database">Search database</a>
+            <a href="/database">Go to patient-panel database</a>
         </div>
         <hr>
         <div class="box">
             <form method="POST" action="/search">
-                <label for="search_input">Enter an R-number value: </label>
+                <label for="search_input">Enter an R-code from the National Genomic Test Directory: </label>
                 <input type="text" id="search_input" name="r" required>
+                <p>Please note the search input must begin with 'R'</p>
                 <button type="submit">Search</button>
             </form>
         </div>

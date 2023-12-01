@@ -108,12 +108,15 @@ def create_app(test_config=None):
         exon_or_transcript = request.form['version']
         # add an additonal 50bp padding to the exons or transcript
         selected_padding = request.form['padding']
+        # Number of bases to pad exon/transcript
+        bases = request.form['base_num']
 
         obj_for_bed = bedmake.RCodeToBedFile(
             test_code=r_code,
             include_exon=exon_or_transcript,
             ref_genome=selected_build,
-            padded=selected_padding)
+            padded=selected_padding,
+            num_bases=bases)
 
         output_content = obj_for_bed.create_string_bed()
 
