@@ -15,7 +15,8 @@ class RCodeToBedFile():
         test_code,
         ref_genome,
         include_exon=True,
-        padded=True
+        padded=True,
+        num_bases=50,
     ):
 
         self.ref_genome = ref_genome
@@ -28,6 +29,7 @@ class RCodeToBedFile():
             self.padded = True
         else:
             self.padded = False
+        self.bases = int(num_bases)
 
     def get_panel_for_genomic_test(self):
         """
@@ -114,6 +116,7 @@ class RCodeToBedFile():
     def pad_bed_files(self):
         """Creates a bedfile structure for front end creation of bedfile"""
         coords_for_bed = []
+        num_bases_pad = self.bases
         try:
             for gene in self.get_coords_for_bed():
                 for entity in gene:
@@ -121,8 +124,8 @@ class RCodeToBedFile():
                     for i in range(0, len(entity), 3):
                         chrom, start, end = entity[i:i+3]
                     # Ensure start is non-negative
-                        start = max(0, int(start) - 50)
-                        end = int(end) + 50
+                        start = max(0, int(start) - num_bases_pad)
+                        end = int(end) + num_bases_pad
                         coords_for_bed.append(
                             [str(chrom), int(start), int(end)])
             return coords_for_bed
@@ -152,10 +155,6 @@ class RCodeToBedFile():
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
 
 
-test_code = 'R169'
-ref_genome = 'GRCh38'
 
-obj = RCodeToBedFile(test_code, ref_genome, padded=True, include_exon='Exons')
-print(obj.get_coords_for_bed())
 
 
