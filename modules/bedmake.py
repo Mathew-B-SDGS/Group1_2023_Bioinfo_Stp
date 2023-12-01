@@ -20,7 +20,7 @@ class RCodeToBedFile():
 
         self.ref_genome = ref_genome
         self.test_code = test_code.upper()
-        if include_exon == 'Exon':
+        if include_exon == 'True' or include_exon is True:
             self.include_exon = True
         else:
             self.include_exon = False
@@ -151,12 +151,11 @@ class RCodeToBedFile():
     def __str__(self):
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
 
-"""
+
 test_code = 'R169'
 ref_genome = 'GRCh38'
 
 obj = RCodeToBedFile(test_code, ref_genome, padded=True, include_exon='Exons')
-print(obj.pad_bed_files())
-
 print(obj.get_coords_for_bed())
-"""
+
+
