@@ -1,5 +1,8 @@
 import requests
-import sys
+import logging
+
+logger = logging.getLogger('PanelSearchApp')
+
 
 
 class RCodeToBedFile():

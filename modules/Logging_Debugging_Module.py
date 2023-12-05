@@ -1,7 +1,9 @@
-import logging
+import logging.config
+from . import settings
+
 # To confugure 
 # Create a logger
-logger = logging.getLogger("mylogger")
+logger = logging.getLogger("panelsearchapp")
 
 # To capture all the messages at DEBUG level, this will set a logging level 
 logger.setLevel(logging.DEBUG)
@@ -29,5 +31,5 @@ def some_function():
     logger.debug ("Exiting the application")
     logger.info("Info Message")
     logger.warning("Warning error message")
-    logger.error("This is an Erorr message")
+    logger.error("This is an Error message")
     logger.critical("Critical Message")
