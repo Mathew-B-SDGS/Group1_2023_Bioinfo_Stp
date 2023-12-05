@@ -5,6 +5,12 @@
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
 
+<style>
+    * {
+      font-family: sans-serif;
+    }
+</style>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,10 +21,11 @@
 </head>
 
 <body>
-    <h1>Search Results {{results.r}}</h1>
+    <h1>Panel search results for test code {{results.r}}</h1>
+    <h2>Panel name: {{results.panel_label}} </h2>
     <h4> <i>Return to <a href="/">Search</a> </i> </h4>
     <hr>
-    <h2> <a href="/search/genelist">View genelist </a> </h2>
+    <h2> <a href="/search/genelist">View genelist for panel</a> </h2>
     <p> To download a BED file for the selectd panel please enter your search parameters
         and click the download button below. <br>
         Choose between <b>GRCh37 or GRCh38</b> reference genome, and choose between
