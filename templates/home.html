@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<style>
+    * {
+      font-family: sans-serif;
+    }
+</style>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,7 +31,7 @@
 
 <body>
     <div class="container">
-        <h1>Welcome to Panel Searcher!</h1>
+        <h1>Welcome to PanelSearcher!</h1>
         <hr>
         <div class="box">
             <p>Enter an <b>R-code</b> to find the associated panel</p>
@@ -48,17 +54,23 @@
             <h2>Understanding R-Numbers and Gene Panels</h2>
 
             <p>The National Genomic Test Directory serves as a cataloge of the
-                various genomic tests availble on the NHS. (in england)</p>
+                various genomic tests availble on the NHS (in England).</p>
 
-            <p>R-Numbers are unique identifiers assigned to individual genomic tests within
+            <p>Please find a link to the latest version of the National Genomic Test Directory:</p>
+            <a href="https://www.england.nhs.uk/publication/national-genomic-test-directories/">NHS England</a>
+            <p>Please note version 5.1 (June 2023) is being used in this software</p>
+
+            <p>R-codes are unique identifiers assigned to individual genomic tests within
                 the directory. These alphanumeric codes help streamline the search process, making it efficient for
                 healthcare professionals and researchers to locate specific tests.</p>
 
-            <p>Search for a specific R-number to find the associated gene panel, and Download the availble Bed File</p>
+            <p>Some R-codes are associated with an NGS test which require gene panels to specify the region of interest for sequencing. These
+                regions of interest are defined within a BED file.
+            </p>
+            
+            <p>PanelSearcher allows you to search for panel information using a R-code and create a BED file for the panel. </p>
 
-            <p>Please find a link to the National Genomic Test Directory below:</p>
-            <a href="https://www.england.nhs.uk/publication/national-genomic-test-directories/">NHS England</a>
-
+        
 
             <hr>
 
