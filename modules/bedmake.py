@@ -159,9 +159,3 @@ class RCodeToBedFile():
     def __str__(self):
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
 
-
-test_code = 'r208'
-ref_genome = 'GRCh38'
-
-
-print(RCodeToBedFile(test_code, ref_genome).extract_genes_hgnc())
