@@ -10,7 +10,7 @@ from AppBlueprints import database_blueprint, user_auth
 
 
 def create_app(test_config=None):
-    """ 
+    """
     IMPORTANT MAKE SURE TO INDENT ALL CODE IN THIS FUNCTION TO BE ALLIGNED
 
     This is a factory function that creates the app, changed to this as it

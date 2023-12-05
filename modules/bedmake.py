@@ -58,10 +58,15 @@ class RCodeToBedFile():
         response from function above
         """
         gene_list = []
+        gene_name_symbol_list = []
         gene_information = self.get_panel_for_genomic_test()
         for gene in gene_information["genes"]:
             gene_list.append(gene["gene_data"]["hgnc_id"])
-        return gene_list
+            gene_list.append(gene["gene_data"]["hgnc_symbol"])
+            gene_name_symbol_list.append(gene_list)
+            gene_list = []
+        return gene_name_symbol_list
+
 
     def get_coords_for_bed(self):
         """Retrieves the coordinates for the bedfile, if padded_exons=True
@@ -153,8 +158,4 @@ class RCodeToBedFile():
 
     def __str__(self):
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
-
-
-
-
 
