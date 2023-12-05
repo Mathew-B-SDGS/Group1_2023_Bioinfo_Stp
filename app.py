@@ -71,6 +71,7 @@ def create_app(test_config=None):
                 api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
                 filtered_api_result = api_calls_object.get_panel_for_genomic_test()
                 panel_name = filtered_api_result['name']
+                panel_version = filtered_api_result['version']
 
                 # Create an object instance of the Parser class and parse the excel file
                 Parsed_results_object = ParserExcel.Parser()
@@ -79,7 +80,8 @@ def create_app(test_config=None):
                 # Create a dictionary to pass to the results.html template for Jinja to render
                 jina_data = {"df": filtered_df,
                              "r_json": filtered_api_result, "r": r_code.upper(),
-                               "panel_label": panel_name}
+                               "panel_label": panel_name,
+                               "panel_version": panel_version}
 
                 # if the api call has worked, render the results.html template with Jinja data
                 if filtered_api_result:
