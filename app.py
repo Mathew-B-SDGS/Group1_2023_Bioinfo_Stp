@@ -78,14 +78,14 @@ def create_app(test_config=None):
                 filtered_df = Parsed_results_object.parse(r_code=r_code)
 
                 # Create a dictionary to pass to the results.html template for Jinja to render
-                jina_data = {"df": filtered_df,
+                jijna_data = {"df": filtered_df,
                              "r_json": filtered_api_result, "r": r_code.upper(),
-                               "panel_label": panel_name,
+                             "panel_label": panel_name,
                                "panel_version": panel_version}
 
                 # if the api call has worked, render the results.html template with Jinja data
                 if filtered_api_result:
-                    return render_template("results.html", results=jina_data)
+                    return render_template("results.html", results=jijna_data)
                 else:
                     return "<p>Panel not found </p><a href='/'>Go back</a>"
             # Handle cases where 'r' is not provided or other issues
@@ -98,10 +98,18 @@ def create_app(test_config=None):
         r_code = session.get('r')
         if r_code is not None:
             api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
-            filtered_api_result = api_calls_object.extract_genes_hgnc()
-            return filtered_api_result
+            panel_info = api_calls_object.get_panel_for_genomic_test()
+            gene_name_panel = api_calls_object.extract_genes_hgnc()
+            panel_name = panel_info['name']
+            panel_version = panel_info['version']
+            data_genepage = {"gene_list": gene_name_panel,
+                             "panel_name": panel_name,
+                             "panel_version": panel_version}
+            return render_template("genelist.html", results=data_genepage)
         else:
-            return "<p>No 'r' parameter found in the session</p>"
+            return "No 'r' parameter found in the session"
+
+    
 
     @app.route("/search/download", endpoint="download", methods=['POST'])
     def download_file():

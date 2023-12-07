@@ -20,8 +20,13 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        <p>Download Bam File for Gene panel {{r}}</p>
-        <p><a href="/search/download"><b> Download</b></a></p>
+        <p>Genes on panel {{results.panel_name}} </p>
+        {% for gene, HGNC in results.gene_list %}
+        <tr>
+          <td>{{gene}}</td>
+          <td>{{HGNC}}</td>
+        </tr>
+        {% endfor %}
         <hr>
         <table>
             <thead>
@@ -32,13 +37,6 @@
               </tr>
             </thead>
             <tbody>
-              {% for item in genes %}
-                <tr>
-                  <td>{{ item.key1 }}</td>
-                  <td>{{ item.key2 }}</td>
-                  <!-- Add more columns as needed, using keys from your dictionary -->
-                </tr>
-              {% endfor %}
             </tbody>
           </table>
           
