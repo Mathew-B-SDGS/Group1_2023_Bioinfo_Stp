@@ -18,27 +18,32 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        <title>Genes</title>
     </head>
     <body>
-        <p>Download Bam File for Gene panel {{r}}</p>
-        <p><a href="/search/download"><b> Download</b></a></p>
+        <h1>Panel {{results.panel_name}} v{{results.panel_version}} Genes</h1>
         <hr>
-        <table>
+        <div class="box"> </div>
+        <br>
+        <table border = "1">
             <thead>
               <tr>
-                <th>Header 1</th>
-                <th>Header 2</th>
+                <th>Gene symbol</th>
+                <th>Gene Name</th>
                 <!-- Add more headers as needed -->
               </tr>
             </thead>
             <tbody>
-              {% for item in genes %}
-                <tr>
-                  <td>{{ item.key1 }}</td>
-                  <td>{{ item.key2 }}</td>
-                  <!-- Add more columns as needed, using keys from your dictionary -->
-                </tr>
-              {% endfor %}
+              {% for HGNC, name in results.gene_list %}
+              <tr>
+                <td class="gene_sym">
+                    <div class="symbol">{{HGNC}}</div>
+                </td>
+                <td class="gene_name">
+                  <div class="name">{{name}}</div>
+               </td>
+              </tr>
+            {% endfor %}
             </tbody>
           </table>
           
