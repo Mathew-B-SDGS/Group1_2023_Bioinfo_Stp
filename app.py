@@ -68,7 +68,8 @@ def create_app(test_config=None):
             session['r'] = r_code.upper()
             if r_code:
                 # Create an object instance of the ApiCallsSadie class and fetch the panel
-                api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
+                api_calls_object = bedmake.RCodeToBedFile(
+                    r_code, ref_genome='GRCh38')
                 filtered_api_result = api_calls_object.get_panel_for_genomic_test()
                 panel_name = filtered_api_result['name']
                 panel_version = filtered_api_result['version']
@@ -79,9 +80,9 @@ def create_app(test_config=None):
 
                 # Create a dictionary to pass to the results.html template for Jinja to render
                 jijna_data = {"df": filtered_df,
-                             "r_json": filtered_api_result, "r": r_code.upper(),
-                             "panel_label": panel_name,
-                               "panel_version": panel_version}
+                              "r_json": filtered_api_result, "r": r_code.upper(),
+                              "panel_label": panel_name,
+                              "panel_version": panel_version}
 
                 # if the api call has worked, render the results.html template with Jinja data
                 if filtered_api_result:
@@ -97,7 +98,8 @@ def create_app(test_config=None):
     def gene_list():
         r_code = session.get('r')
         if r_code is not None:
-            api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
+            api_calls_object = bedmake.RCodeToBedFile(
+                r_code, ref_genome='GRCh38')
             panel_info = api_calls_object.get_panel_for_genomic_test()
             gene_name_panel = api_calls_object.extract_genes_hgnc()
             panel_name = panel_info['name']
@@ -108,8 +110,6 @@ def create_app(test_config=None):
             return render_template("genelist.html", results=data_genepage)
         else:
             return "No 'r' parameter found in the session"
-
-    
 
     @app.route("/search/download", endpoint="download", methods=['POST'])
     def download_file():
@@ -132,12 +132,30 @@ def create_app(test_config=None):
 
         output_content = obj_for_bed.create_string_bed()
 
+        api_calls_object = bedmake.RCodeToBedFile(
+                r_code, ref_genome='GRCh38')
+        panel_info = api_calls_object.get_panel_for_genomic_test()
+        panel_name = panel_info['name']
+        panel_name = panel_name.replace(' ', '_')
+        panel_version = panel_info['version']
+
         # file_content_bytes = file_content_string.encode('utf-8')
 
         try:
             response = Response(
                 output_content, content_type='text/plain; charset=utf-8')
-            file_name = f'generated_file_{r_code}.bed'
+            bases_pad = []
+            entity = []
+            if selected_padding == 'True':
+                bases_pad = f'{bases}_bp_padding'
+            else:
+                bases_pad = 'no_padding'
+            if exon_or_transcript == 'True':
+                entity = 'MANE_exons'
+            else:
+                entity = 'MANE_transcript'
+
+            file_name = f'{panel_name}_{panel_version}_{entity}_{bases_pad}.bed'
             response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
             return response
         except Exception as e:
