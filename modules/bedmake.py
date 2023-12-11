@@ -70,7 +70,7 @@ class RCodeToBedFile():
 
     def get_coords_for_bed(self):
         """Retrieves the coordinates for the bedfile, if padded_exons=True
-        then exon coordinates will be retrieved else Mane Select transcript
+        then exon coordinates will be retrieved elGse Mane Select transcript
         coordinates will be retrieved.
         """
         try:
@@ -81,9 +81,11 @@ class RCodeToBedFile():
             # Iterate through each gene in the list of genes queried from the
             # PanelApp API
             for gene in gene_list:
+                gene = gene[0]
                 vv_url = (f"https://rest.variantvalidator.org/VariantValidator/"
                           f"tools/gene2transcripts_v2/{gene}/mane/refseq/"
                           f"{self.ref_genome}")
+                print(vv_url)
                 response = requests.get(vv_url)
                 # If the response is successful, then retrieve the Mane Select
                 if response.status_code == 200:
@@ -112,7 +114,6 @@ class RCodeToBedFile():
                     all_gene_coords.append(transcript_coords)
                 else:
                     print("Failed to recieve response from Variant Validator API")
-                    # sys.exit(1)
             return all_gene_coords
         except Exception as e:
             print(self.__str__() + f"\nError: {str(e)}")
@@ -158,4 +159,5 @@ class RCodeToBedFile():
 
     def __str__(self):
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
+
 
