@@ -5,28 +5,35 @@ from modules import ParserExcel, bedmake  # importing local modules ./modules/
 # importing local blueprints ./AppBlueprints/
 from AppBlueprints import database_blueprint, user_auth
 
-# This is the main file that runs the app, it is the file that is run when you run the command 'flask run'
-# Below is the Factory function that creates the app, containing the app routes and blueprints
+
+"""
+## This is the main app file ##
+
+containing the create_app function and all the app routes.
+this function is a factory function that creates the app.
+therefor, all other components are placed in blueprints and imported into this file
+
+"""
 
 
 def create_app(test_config=None):
     """
-    IMPORTANT MAKE SURE TO INDENT ALL CODE IN THIS FUNCTION TO BE ALLIGNED
-
     This is a factory function that creates the app, changed to this as it
     is more flexible an allows us to change things in the config file without 
-    having to change the code in this file. ]
+    having to change the code in this file. 
     its also better if we want to deploy it anywhere else
     """
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
+        # a default secret that should be overridden by instance config.
         SECRET_KEY='GoldSilverMoonStreamWoodpecker',
-        # DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'), #ive commented this out as we are not using a database YET
     )
+    # set the database path to the project.db file
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
 
+    # ensure the instance folder exists
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
@@ -44,18 +51,21 @@ def create_app(test_config=None):
     all blueprints are to be found below this comment
     (blueprints are modules of flask code that can be used to extend the app)
     including
-    - the database blueprint
-    - the Auth blueprint (not yet implemented)
+    - the database blueprint (database page)
+    - the Base blueprint (home page)
     """
-    # install the database blueprint into the module
+    # links the Base blueprint to the app
     app.register_blueprint(base, url_prefix='/')
+    # links the database blueprint to the app
     app.register_blueprint(
         database_blueprint.blueprint_db, url_prefix='/database')
 
+    # initialise the database and connect it to the app
+    # from the /AppBlueprints/database_blueprint.py file
     database_blueprint.db.init_app(app)
-    # Should create the tables in the database
     database_blueprint.create_tables(app.app_context(), database_blueprint.db)
 
+    # finnish the factory function by returning the app
     return app
 
 
@@ -68,6 +78,7 @@ including
 - the download page
 
 """
+# create the Base blueprint
 base = Blueprint('base', __name__, url_prefix='/')
 
 
@@ -98,8 +109,8 @@ def test_data():
             panel_version = filtered_api_result['version']
 
             # Create an object instance of the Parser class and parse the excel file
-            Parsed_results_object = ParserExcel.Parser()
-            filtered_df = Parsed_results_object.parse(r_code=r_code)
+            parsed_results_object = ParserExcel.Parser()
+            filtered_df = parsed_results_object.parse(r_code=r_code)
 
             # Create a dictionary to pass to the results.html template for Jinja to render
             jijna_data = {"df": filtered_df,

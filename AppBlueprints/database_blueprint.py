@@ -36,25 +36,35 @@ def create_tables(context, db):
 
 @blueprint_db.route('/')
 def hello():
-    return "<h1>Database</h1><br><p>this module is for accessing the Database</p>"
+    """Landing page for the database blueprint" """
+    return """
+    <h1>Database</h1><br>
+    <p>this module is for accessing the Database</p><br>
+    <p>click below to go to view or add samples</p><br>
+    <a href="/database/samples">View All</a><br>
+    <a href="/database/samples/create">Add Sample</a><br>
+    """
 
 
 @blueprint_db.route("/samples")
 def sample_list():
-    sample = db.session.execute(
+    """list all samples in the database"""
+    samples_list_db = db.session.execute(
         db.select(Sample).order_by(Sample.sample_id)).scalars()
-    return sample
-    # return render_template("sample_list.html", sample=sample)
+    return render_template("sample_list_all.html", sample=samples_list_db)
 
 
 @blueprint_db.route("/samples/create", methods=["GET", "POST"])
 def sample_create():
+    """create a new sample in the database"""
     if request.method == "POST":
+
+        # create a new sample object and add it to the database
         sample = Sample(
-            sample_name=request.form["sample_name"],
-            sample_type=request.form["sample_type"]
+            sample_name=request.form["sample_name"].strip(),
+            sample_type=request.form["sample_type"].strip()
         )
         db.session.add(sample)
         db.session.commit()
         return redirect(url_for("database.sample_list"))
-    return "hello"
+    return render_template("sample_create.html")
