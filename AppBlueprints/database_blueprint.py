@@ -1,8 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
 
 blueprint_db = Blueprint('database', __name__, url_prefix='/database')
 
