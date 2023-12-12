@@ -1,5 +1,4 @@
 import requests
-import sys
 
 
 class RCodeToBedFile():
@@ -85,7 +84,6 @@ class RCodeToBedFile():
                 vv_url = (f"https://rest.variantvalidator.org/VariantValidator/"
                           f"tools/gene2transcripts_v2/{gene}/mane/refseq/"
                           f"{self.ref_genome}")
-                print(vv_url)
                 response = requests.get(vv_url)
                 # If the response is successful, then retrieve the Mane Select
                 if response.status_code == 200:
@@ -159,5 +157,3 @@ class RCodeToBedFile():
 
     def __str__(self):
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"
-
-
