@@ -5,8 +5,10 @@ from modules import ParserExcel, bedmake  # importing local modules ./modules/
 # importing local blueprints ./AppBlueprints/
 from AppBlueprints import database_blueprint, user_auth
 
-# This is the main file that runs the app, it is the file that is run when you run the command 'flask run'
-# Below is the Factory function that creates the app, containing the app routes and blueprints
+# This is the main file that runs the app, it is the file that is run when you 
+# run the command 'flask run'
+# Below is the Factory function that creates the app, containing the app 
+# routes and blueprints
 
 
 def create_app(test_config=None):
@@ -67,25 +69,32 @@ def create_app(test_config=None):
             r_code = request.form.get('r')
             session['r'] = r_code.upper()
             if r_code:
-                # Create an object instance of the ApiCallsSadie class and fetch the panel
-                api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
-                filtered_api_result = api_calls_object.get_panel_for_genomic_test()
-                panel_name = filtered_api_result['name']
-                panel_version = filtered_api_result['version']
+                # Create an object instance of the RCodeToBedFile class and
+                # fetch the panel info
+                bedmake_object = bedmake.RCodeToBedFile(
+                    r_code, ref_genome='GRCh38')
+                panel_information = bedmake_object.get_panel_for_genomic_test()
+                panel_name = panel_information['name']
+                panel_version = panel_information['version']
 
-                # Create an object instance of the Parser class and parse the excel file
+                # Create an object instance of the Parser class and parse the
+                # NGTD excel file
                 Parsed_results_object = ParserExcel.Parser()
-                filtered_df = Parsed_results_object.parse(r_code=r_code)
+                filtered_NGTD = Parsed_results_object.parse(r_code=r_code)
 
-                # Create a dictionary to pass to the results.html template for Jinja to render
-                jijna_data = {"df": filtered_df,
-                             "r_json": filtered_api_result, "r": r_code.upper(),
-                             "panel_label": panel_name,
-                               "panel_version": panel_version}
+                # Create a dictionary to pass to the results.html template for
+                # Jinja to render
+                r_results_data = {"df": filtered_NGTD,
+                                  "r_json": panel_information,
+                                  "r": r_code.upper(),
+                                  "panel_label": panel_name,
+                                  "panel_version": panel_version}
 
-                # if the api call has worked, render the results.html template with Jinja data
-                if filtered_api_result:
-                    return render_template("results.html", results=jijna_data)
+                # if the api call has worked, render the results.html template
+                # with results data
+                if panel_information:
+                    return render_template("results.html",
+                                           results=r_results_data)
                 else:
                     return "<p>Panel not found </p><a href='/'>Go back</a>"
             # Handle cases where 'r' is not provided or other issues
@@ -97,9 +106,10 @@ def create_app(test_config=None):
     def gene_list():
         r_code = session.get('r')
         if r_code is not None:
-            api_calls_object = bedmake.RCodeToBedFile(r_code, ref_genome='GRCh38')
-            panel_info = api_calls_object.get_panel_for_genomic_test()
-            gene_name_panel = api_calls_object.extract_genes_hgnc()
+            bedmake_object = bedmake.RCodeToBedFile(
+                r_code, ref_genome='GRCh38')
+            panel_info = bedmake_object.get_panel_for_genomic_test()
+            gene_name_panel = bedmake_object.extract_genes_hgnc()
             panel_name = panel_info['name']
             panel_version = panel_info['version']
             data_genepage = {"gene_list": gene_name_panel,
@@ -108,8 +118,6 @@ def create_app(test_config=None):
             return render_template("genelist.html", results=data_genepage)
         else:
             return "No 'r' parameter found in the session"
-
-    
 
     @app.route("/search/download", endpoint="download", methods=['POST'])
     def download_file():
@@ -132,13 +140,32 @@ def create_app(test_config=None):
 
         output_content = obj_for_bed.create_string_bed()
 
+        api_calls_object = bedmake.RCodeToBedFile(
+            r_code, ref_genome='GRCh38')
+        panel_info = api_calls_object.get_panel_for_genomic_test()
+        panel_name = panel_info['name']
+        panel_name = panel_name.replace(' ', '_')
+        panel_version = panel_info['version']
+
         # file_content_bytes = file_content_string.encode('utf-8')
 
         try:
             response = Response(
                 output_content, content_type='text/plain; charset=utf-8')
-            file_name = f'generated_file_{r_code}.bed'
-            response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
+            bases_pad = []
+            entity = []
+            if selected_padding == 'True':
+                bases_pad = f'{bases}_bp_padding'
+            else:
+                bases_pad = 'no_padding'
+            if exon_or_transcript == 'True':
+                entity = 'MANE_exons'
+            else:
+                entity = 'MANE_transcript'
+
+            name = f'{panel_name}_{panel_version}_{entity}_{bases_pad}.bed'
+            attach = f'attachment; filename={name}'
+            response.headers['Content-Disposition'] = attach
             return response
         except Exception as e:
             return f"Error: {str(e)}"
