@@ -6,6 +6,7 @@ from modules import ParserExcel, bedmake  # importing local modules ./modules/
 from AppBlueprints import database_blueprint, user_auth
 
 
+
 """
 ## This is the main app file ##
 
@@ -14,7 +15,6 @@ this function is a factory function that creates the app.
 therefor, all other components are placed in blueprints and imported into this file
 
 """
-
 
 def create_app(test_config=None):
     """
@@ -54,6 +54,7 @@ def create_app(test_config=None):
     - the database blueprint (database page)
     - the Base blueprint (home page)
     """
+    
     # links the Base blueprint to the app
     app.register_blueprint(base, url_prefix='/')
     # links the database blueprint to the app
