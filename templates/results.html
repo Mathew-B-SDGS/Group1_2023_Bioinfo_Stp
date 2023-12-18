@@ -4,30 +4,84 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <h1>Search Results {{results.r}}</h1>
-        <h4> <i>Return to <a href="/">Search</a> </i> </h4>
-        <hr>
-        <p> find below the API results and Natinal Genomic Test Directory</p>
-        <p> {{results.df.to_html() | safe}}</p>
-        <hr>
-        <br>
-        <ul>
-            {% for key, value in results.r_json.items() %}
-                <li><strong>{{ key }}:</strong> {{ value }}</li>
-            {% endfor %}
-        </ul>
-        <br>
-        <p> {{results.r_json | tojson}}</p>        
 
-        <script src="" async defer></script>
-    </body>
+<style>
+    * {
+      font-family: sans-serif;
+    }
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <h1>Panel search results for test code {{results.r}}</h1>
+    <h2>Panel name: {{results.panel_label}}</h2>
+    <h3>Panel version {{results.panel_version}} </h3>
+    <h4> <i>Return to <a href="/">Search</a> </i> </h4>
+    <hr>
+    <h2> <a href="/search/genelist">View genelist for panel</a> </h2>
+    <hr />
+    <h2>BED file download</h2>
+    <p> To download a BED file for the selected panel please enter your search parameters
+        and click the download button below. 
+        <br>
+        The coordinates are taken from the MANE Select transcript of each gene.
+        <br>
+        <br>
+    </p>
+    
+    <form action="/search/download" method="post">
+        <label for="build">Choose a genome build:</label>
+        <select name="build" id="build">
+            <option value="GRCh37">GRCh37</option>
+            <option value="GRCh38">GRCh38</option>
+        </select>
+        <br>
+        <br>
+        <!-- choose between 150 or normal -->
+        <label for="version">Include exon coordinates or the whole transcript (Mane Select) coordinates:</label>
+        <select name="version" id="version">
+            <option value="True">Exons</option>
+            <option value="False">transcript</option>
+        </select>
+        <br>
+        <br>
+        <label for="padding">Add upstream and downstream base pair padding to each exon or transcript coordinates?</label>
+        <select name="padding" id="padding">
+            <option value="True">True</option>
+            <option value="False">False</option>
+        </select>
+        <br>
+        <br>
+        <label for="base_num">Select how many base pairs to pad upstream and downstream of the exons or transcript if required:</label>
+            <input type="number" id="base_num" name="base_num" placeholder="50" value="50">
+        <br>
+        <br>
+        <input type="submit" value="Download BED File">
+    </form>
+
+    <!-- <h2><a href="/search/download"><b> Download</b></a></h2> -->
+    <hr>
+    <h3> National Genomic Test Directory entries</h3>
+    <p> {{results.df.to_html() | safe}}</p>
+    <hr>
+    <br>
+    <button onclick="myFunction()" > Reveal all PanelApp information for {{results.panel_label}} panel</button>
+    <p id="demo"></p>
+    <script>
+        function myFunction() {
+            document.getElementById("demo").innerHTML = "{% for key, value in results.r_json.items() %} <li><strong>{{ key }} :</strong> {{value}}</li> {% endfor %}"
+        }
+    </script>
+    <br>
+    <script src="" async defer></script>
+</body>
+
 </html>

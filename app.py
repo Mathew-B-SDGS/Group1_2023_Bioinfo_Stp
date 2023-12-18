@@ -1,83 +1,204 @@
-from flask import Flask, request, render_template
-from modules import test_api, PanelAppApi, ParserExcel
+from flask import Flask, request, render_template, session, Response, Blueprint
+import os
+from AppBlueprints import database_blueprint
+from modules import ParserExcel, bedmake  # importing local modules ./modules/
+# importing local blueprints ./AppBlueprints/
+from AppBlueprints import database_blueprint
 
 
-app = Flask(__name__)
-app.debug = True  
+
+"""
+## This is the main app file ##
+
+containing the create_app function and all the app routes.
+this function is a factory function that creates the app.
+therefor, all other components are placed in blueprints and imported into this file
+
+"""
+
+def create_app(test_config=None):
+    """
+    This is a factory function that creates the app, changed to this as it
+    is more flexible an allows us to change things in the config file without 
+    having to change the code in this file. 
+    its also better if we want to deploy it anywhere else
+    """
+
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config.
+        SECRET_KEY='GoldSilverMoonStreamWoodpecker',
+    )
+    # set the database path to the project.db file
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
+
+    # ensure the instance folder exists
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
+
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+
+    """
+    all blueprints are to be found below this comment
+    (blueprints are modules of flask code that can be used to extend the app)
+    including
+    - the database blueprint (database page)
+    - the Base blueprint (home page)
+    """
+    
+    # links the Base blueprint to the app
+    app.register_blueprint(base, url_prefix='/')
+    # links the database blueprint to the app
+    app.register_blueprint(
+        database_blueprint.blueprint_db, url_prefix='/database')
+
+    # initialise the database and connect it to the app
+    # from the /AppBlueprints/database_blueprint.py file
+    database_blueprint.db.init_app(app)
+    database_blueprint.create_tables(app.app_context(), database_blueprint.db)
+
+    # finnish the factory function by returning the app
+    return app
 
 
-@app.route("/")
+"""
+all app routes are to be found below this comment
+including 
+- the home page
+- the search page
+- the gene list page
+- the download page
+
+"""
+# create the Base blueprint
+base = Blueprint('base', __name__, url_prefix='/')
+
+
+@base.route("/")
 def hello_world():
+    """
+    This is the home page route, it renders the home.html template with 
+    links to search an R number and to go to the database or Auth pages 
+    """
     return render_template("home.html")
 
 
-@app.route("/search", methods=['POST'])
+@base.route("/search", methods=['POST'])
 def test_data():
+    """
+    This is the search page route, it renders the search.html template with
+    the search form and a link to the home page using the Data
+    """
     if request.method == 'POST':
-        r_number = request.form.get('r')
-        if r_number:
-            # Create an object instance of the ApiCallsSadie class and fetch the panel
-            api_calls_object = PanelAppApi.ApiCallsSadie()
-            filtered_api_result = api_calls_object.return_specific_panel(r_number)
+        r_code = request.form.get('r')
+        session['r'] = r_code.upper()
+        if r_code:
+            # Create an object instance of the RCodeToBedFile class 
+            # and fetch the panel info
+            bedmake_object = bedmake.RCodeToBedFile(
+                r_code, ref_genome='GRCh38')
+            panel_information = bedmake_object.get_panel_for_genomic_test()
+            panel_name = panel_information['name']
+            panel_version = panel_information['version']
 
-            # Create an object instance of the Parser class and parse the excel file
-            Parsed_results_object=ParserExcel.Parser()
-            filtered_df= Parsed_results_object.parse(r_number=r_number)
+            # Create an object instance of the Parser class 
+            # and parse the NGTD excel file
+            parsed_results_object = ParserExcel.Parser()
+            filtered_NGTD = parsed_results_object.parse(r_code=r_code)
 
-            # Create a dictionary to pass to the results.html template for Jinja to render
-            jina_data= {"df":filtered_df, "r_json": filtered_api_result, "r":r_number}
-            
-            #if the api call has worked, render the results.html template with Jinja data
-            if filtered_api_result:
-                return render_template("results.html", results=jina_data)#
+            # Create a dictionary to pass to the results.html template 
+            # for Jinja to render
+            r_results_data = {"df": filtered_NGTD,
+                          "r_json": panel_information,
+                          "r": r_code.upper(),
+                          "panel_label": panel_name,
+                          "panel_version": panel_version}
+
+            # if the api call has worked, render the results.html template 
+            # with results data
+            if panel_information:
+                return render_template("results.html", results=r_results_data)
             else:
                 return "<p>Panel not found </p><a href='/'>Go back</a>"
-        return "<p>No data provided or invalid request</p>"  # Handle cases where 'r' is not provided or other issues
-    return "<p>GET request is not supported. Use the search form.</P."  # Inform users that a GET request is not supported
-
-@app.route("/testapi", endpoint="testapi")
-def test_data():
-    # api_object_testapi =  ()
-    return test_api.TestApi.allpanels()
-
-@app.route("/allpanels", endpoint="allpanels")
-def all_panels():
-    # Create an instance of the ApiCallsSadie class
-    api_calls_sadie = PanelAppApi.ApiCallsSadie()
-    return api_calls_sadie.get_panels_for_genomic_test()
+        # Handle cases where 'r' is not provided or other issues
+        return "<p>No data provided or invalid request</p>"
+    # Inform users that a GET request is not supported
+    return "<p>GET request is not supported. Use the search form.</P."
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@base.route("/search/genelist", methods=['GET'], endpoint="genelist")
+def gene_list():
+    r_code = session.get('r')
+    if r_code is not None:
+        bedmake_object = bedmake.RCodeToBedFile(
+            r_code, ref_genome='GRCh38')
+        panel_info = bedmake_object.get_panel_for_genomic_test()
+        gene_name_panel = bedmake_object.extract_genes_hgnc()
+        panel_name = panel_info['name']
+        panel_version = panel_info['version']
+        data_genepage = {"gene_list": gene_name_panel,
+                         "panel_name": panel_name,
+                         "panel_version": panel_version}
+        return render_template("genelist.html", results=data_genepage)
+    else:
+        return "No 'r' parameter found in the session"
 
 
+@base.route("/search/download", endpoint="download", methods=['POST'])
+def download_file():
+    r_code = session.get('r')
+    # choose between GRCh38 or GRCh37
+    selected_build = request.form['build']
+    # choose between Mane Select transcript coordinates or exon coordinates
+    exon_or_transcript = request.form['version']
+    # add an additonal 50bp padding to the exons or transcript
+    selected_padding = request.form['padding']
+    # Number of bases to pad exon/transcript
+    bases = request.form['base_num']
 
+    obj_for_bed = bedmake.RCodeToBedFile(
+        test_code=r_code,
+        include_exon=exon_or_transcript,
+        ref_genome=selected_build,
+        padded=selected_padding,
+        num_bases=bases)
 
+    output_content = obj_for_bed.create_string_bed()
 
+    bedmake_object = bedmake.RCodeToBedFile(
+        r_code, ref_genome='GRCh38')
+    panel_info = bedmake_object.get_panel_for_genomic_test()
+    panel_name = panel_info['name']
+    panel_name = panel_name.replace(' ', '_')
+    panel_version = panel_info['version']
 
+    # file_content_bytes = file_content_string.encode('utf-8')
 
-
-# @app.route("/test", methods=['GET', 'POST'])
-# def test_data():
-#     if request.method == 'POST':
-#         r = request.form.get('r')
-#         if r:
-#             # Create an instance of the ApiCallsSadie class and fetch the panel
-#             api_calls_sadie = PanelAppApi.ApiCallsSadie()
-#         return api_calls_sadie.return_specific_panel(r)
-
-# @app.route("/search", methods=['POST'])
-# def test_data():
-#     if request.method == 'POST':
-#         r = request.form.get('r')
-#         if r:
-#             # Create an instance of the ApiCallsSadie class and fetch the panel
-#             api_calls_sadie = PanelAppApi.ApiCallsSadie()
-#             result = api_calls_sadie.return_specific_panel(r)
-#             #check if the result has actually worked, Cant check for status code as its not a request module anymore
-#             if result:
-#                 return result
-#             else:
-#                 return "<p>Panel not found </p><a href='/'>Go back</a>"
-#         return "<p>No data provided or invalid request</p>"  # Handle cases where 'r' is not provided or other issues
-#     return "<p>GET request is not supported. Use the search form.</P."  # Inform users that a GET request is not supported
+    try:
+        response = Response(
+            output_content, content_type='text/plain; charset=utf-8')
+        base_pad = []
+        entity = []
+        if exon_or_transcript == 'True':
+            entity = 'MANE_exons'
+        else:
+            entity = 'MANE_transcript'
+        if selected_padding == 'True':
+            base_pad = f'{bases}_bp_padding'
+        else:
+            base_pad = 'no_padding'
+        name = f'{panel_name}_{panel_version}_{entity}_{base_pad}.bed'
+        attach = f'attachment; filename={name}'
+        response.headers['Content-Disposition'] = attach
+        return response
+    except Exception as e:
+        return f"Error: {str(e)}"

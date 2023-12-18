@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<style>
+  * {
+    font-family: sans-serif;
+  }
+</style>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <title>Genes</title>
+    </head>
+    <body>
+        <h1>Panel {{results.panel_name}} v{{results.panel_version}} Genes</h1>
+        <hr>
+        <div class="box"> </div>
+        <br>
+        <table border = "1">
+            <thead>
+              <tr>
+                <th>Gene symbol</th>
+                <th>Gene Name</th>
+                <!-- Add more headers as needed -->
+              </tr>
+            </thead>
+            <tbody>
+              {% for HGNC, name in results.gene_list %}
+              <tr>
+                <td class="gene_sym">
+                    <div class="symbol">{{HGNC}}</div>
+                </td>
+                <td class="gene_name">
+                  <div class="name">{{name}}</div>
+               </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          
+        <script src="" async defer></script>
+    </body>
+</html>
