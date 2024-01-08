@@ -1,6 +1,17 @@
 import requests
+import logging.config
+from Settings import LOGGING_CONFIG
+
 # Specifying the API endpoint URL
 api_url = "https://panelapp.genomicsengland.co.uk/api/v1/panels"
+
+# Configure logging from settings.py
+logging.config.dictConfig(LOGGING_CONFIG)
+
+# The logging module
+logger = logging.getLogger(__name__)
+logger.debug('This is a debug message')
+
 
 # Make a request to the API to retrieve the panels, with an filtering criteria
 class ApiCallsSadie:
@@ -11,7 +22,7 @@ class ApiCallsSadie:
         if response.status_code == 200:
             return response.json()
         else:
-            print("Failed to retrieve panels")
+            logging.error("Failed to retrieve panels")
             return None
 # Specify the ID of the panel you want to retrieve, which looks into the relevant disorders to get the R number
     def return_specific_panel(self, test_code):
