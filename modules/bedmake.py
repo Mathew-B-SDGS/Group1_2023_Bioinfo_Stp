@@ -119,7 +119,7 @@ class RCodeToBedFile():
                         transcript_coords.append(chrom_start_end)
                     all_gene_coords.append(transcript_coords)
                 else:
-                    print("Failed to recieve response from Variant Validator API")
+                    logging.error("Failed to recieve response from Variant Validator API")
             return all_gene_coords
         except Exception as e:
             logger.error(self.__str__() + f"\nError: {str(e)}")
