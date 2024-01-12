@@ -1,3 +1,8 @@
+import sphix_rtd_theme 
+
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -14,16 +19,12 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-import sphinx_rtd_theme 
-
-html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # -- Project information -----------------------------------------------------
 
 project = 'Group1_2023_Bioinfo_Stp'
-copyright = '2023, Huma'
-author = 'Huma'
+copyright = '2023, Matthew, Sadie, Huma'
+author = 'Matthew, Sadie, Huma'
 
 # The full version, including alpha/beta/rc tags
 release = 'y'
@@ -34,8 +35,7 @@ release = 'y'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-]
+extensions = ["myst_parser"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -57,5 +57,3 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
-extensions = ["myst_parser"] 
