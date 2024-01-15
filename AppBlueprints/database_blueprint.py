@@ -1,7 +1,9 @@
+from __future__ import annotations
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String
+from sqlalchemy import create_engine, select, Column, ForeignKey, Integer, String, Float, Boolean
+from sqlalchemy.orm import Session, DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
+from typing import Optional, List
 
 blueprint_db = Blueprint('database', __name__, url_prefix='/database')
 
@@ -17,11 +19,67 @@ db = SQLAlchemy(model_class=Base)
 class Sample(db.Model):
     """table holds Batch details, for all samples processed in a run"""
     __tablename__ = "sample"
-
     sample_id: Mapped[int] = mapped_column(
         Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
     sample_name: Mapped[str] = mapped_column(String(30), nullable=False)
     sample_type: Mapped[str] = mapped_column(String(30), nullable=True)
+    # relationships
+    patient_relationship: Mapped[Patient] = relationship(
+        back_populates='patient_samples')
+
+    def __repr__(self):
+        return f"sample_id: {self.sample_id}, sample_name: {self.sample_name}"
+
+
+class Patient(db.Model):
+    """table holds Patient details, for all samples processed in a run"""
+    __tablename__ = "patient"
+
+    patient_id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
+    patient_name: Mapped[str] = mapped_column(String(30), nullable=False)
+    patient_type: Mapped[str] = mapped_column(String(30), nullable=True)
+
+    # relationships
+    patient_samples: Mapped[List['Sample']] = relationship(
+        'Sample', back_populates='patient_relationship')
+    run_testcases: Mapped[List['TestCase']] = relationship(
+        'TestCase', back_populates='patient')
+
+    def __repr__(self):
+        return f"patient_id: {self.patient_id}, patient_name: {self.patient_name}"
+
+
+class TestType(db.Model):
+    "table holds TestType details, Includign Rnumber and version"
+    __tablename__ = "testtype"
+    testtype_id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
+    testtype_name: Mapped[str] = mapped_column(String(30), nullable=False)
+    testtype_version: Mapped[str] = mapped_column(String(30), nullable=True)
+
+    def __repr__(self):
+        return f"testtype_id: {self.testtype_id}, testtype_name: {self.testtype_name}"
+
+
+class TestCase(db.Model):
+    """table holds TestCase details, Linking Patient and Test type"""
+    __tablename__ = "testcase"
+
+    testcase_id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
+    date_of_test: Mapped[str] = mapped_column(String(30), nullable=False)
+    # foreign keys
+    Patient_id: Mapped[int] = mapped_column(
+        (ForeignKey('patient.patient_id')), nullable=False)
+    TestType_id: Mapped[int] = mapped_column(
+        (ForeignKey('testtype.testtype_id')), nullable=False)
+
+    # relationships
+    patient: Mapped = relationship('Patient', back_populates='testcase')
+
+    def __repr__(self):
+        return f"testcase_id: {self.testcase_id}, date_of_test: {self.date_of_test}"
 
 
 def create_tables(context, db):
