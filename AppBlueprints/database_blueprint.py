@@ -76,9 +76,9 @@ class TestCase(db.Model):
     date_of_test: Mapped[str] = mapped_column(String(30), nullable=False)
     user: Mapped[str] = mapped_column(String(30), nullable=True)
     # foreign keys
-    sample_id: Mapped[int] = mapped_column(
+    fk_sample_id: Mapped[int] = mapped_column(
         (ForeignKey('patient.patient_id')), nullable=False)
-    TestType_id: Mapped[int] = mapped_column(
+    fk_testtype_id: Mapped[int] = mapped_column(
         (ForeignKey('testtype.testtype_id')), nullable=False)
 
     # relationships
@@ -129,22 +129,27 @@ def sample_list_specific(sample_id):
         .where(Patient.patient_id == sample_id)
 
     results = db.session.execute(stmnt2).all()
-    empty_list = []
+    list_test_details1 = []
+    list_test_details2 = []
+    list_test_details3 = []
     for result in results:
-        empty_list.append(result)
+        print(result.__getattr__)
+        print(result.__getattribute__)
+        list_test_details1.extend([result.TestType.testtype_name, result.TestType.testtype_version,
+                                  result.TestType.testtype_rnumber, result.TestType.list_of_genes])
+        list_test_details2.extend(
+            [result.Patient.patient_id, result.Patient.patient_name])
+        list_test_details3.extend(
+            [result.TestCase.testcase_id, result.TestCase.date_of_test, result.TestCase.user])
 
     # could be scalar or scalars or .all()
-    a = results
 
-    return f"""<h1>Detailed List</h1>
-       <br>
-        {a}
-<br>
-{empty_list}
-<hr>
-        {stmnt2}
-        <br>
-        <br>"""
+    return f"""<h1>Detailed List</h1><br>
+        <h3>Testing details</h3><br>{list_test_details3}<hr>
+        <h3>Patient details</h3><br>{list_test_details2}<hr>
+        <h3>Panel details</h3><br>{list_test_details1}<hr>
+        <br><a href="/database/Samples">Back</a>
+        """
 
 
 @blueprint_db.route("/samples/create", methods=["GET", "POST"])
