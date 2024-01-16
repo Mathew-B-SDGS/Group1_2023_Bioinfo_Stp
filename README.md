@@ -20,6 +20,7 @@ python3 main.py rnumber --outputfile
 ```
 flask --app app run 
 ```
+##### Go to http://localhost:5000 to view the app 
 
 
 ##### Features

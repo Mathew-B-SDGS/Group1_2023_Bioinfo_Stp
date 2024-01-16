@@ -1,7 +1,7 @@
 from __future__ import annotations
 from flask import Blueprint, redirect, render_template, request, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, select, Column, ForeignKey, Integer, String, Float, Boolean, JSON
+from sqlalchemy import create_engine, select, Column, ForeignKey, Integer, String, Float, Boolean, JSON, Select, inspect
 from sqlalchemy.orm import Session, DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
 from typing import Optional, List
 from datetime import datetime
@@ -120,6 +120,33 @@ def sample_list():
     return render_template("sample_list_all.html", sample=samples_list_db)
 
 
+@blueprint_db.route("/samples/<int:sample_id>")
+def sample_list_specific(sample_id):
+    """list Specfic samples in the database, including all details linke to that sample"""
+    stmnt2 = select(Patient, TestType, TestCase)\
+        .join(Patient.which_testcase)\
+        .join(TestCase.which_testtype)\
+        .where(Patient.patient_id == sample_id)
+
+    results = db.session.execute(stmnt2).all()
+    empty_list = []
+    for result in results:
+        empty_list.append(result)
+
+    # could be scalar or scalars or .all()
+    a = results
+
+    return f"""<h1>Detailed List</h1>
+       <br>
+        {a}
+<br>
+{empty_list}
+<hr>
+        {stmnt2}
+        <br>
+        <br>"""
+
+
 @blueprint_db.route("/samples/create", methods=["GET", "POST"])
 def sample_create():
     """create a new sample in the database"""
@@ -194,3 +221,38 @@ def update_patient_panel():
         {session['gene_list']} 
         <br><a href="/">Home</a>
      """
+
+    # test_case_list = db.session.select(Patient).filter(
+    #     Patient.patient_id == sample_id).all()
+
+    # new_list = test_case_list.join(TestCase).join(
+    #     TestType)
+# stmnt = select(Patient).where(Patient.patient_id == sample_id).add_columns(TestCase.date_of_test, TestCase.user,
+#                                                                                TestType.testtype_name, TestType.testtype_version, TestType.testtype_rnumber, TestType.list_of_genes)
+
+    # some_patients = db.session.query(Patient).where(Patient.patient_id == sample_id)\
+    #     .join(TestCase, Patient.patient_id == TestCase.sample_id)\
+    #     .join(TestType, TestType.testtype_id == TestCase.TestType_id)\
+    #     .all()
+
+
+# @blueprint_db.route("/samples/<int:sample_id>")
+# def sample_detail(sample_id):
+#     """show a single sample"""
+#     sample = db.session.execute(
+#         db.select(Patient).where(Patient.patient_id == sample_id)).scalars().first()
+#     return f"""<h1>sample Details </h1> <br>
+#         {sample.which_testcase}"""
+
+# @blueprint_db.route("/samples/<int:sample_id>")
+# def sample_detail(sample_id):
+#     """Show a single sample"""
+#     sample = db.session.execute(
+#         select(Patient).where(Patient.patient_id == sample_id)
+#     ).scalars().first()
+
+#     if sample:
+#         return f"""<h1>Sample Details</h1> <br>
+#                    Test Case: {sample.which_testcase}"""
+#     else:
+#         return "Error fetching Sample from Database",
