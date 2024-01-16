@@ -7,7 +7,7 @@
 
 <style>
     * {
-      font-family: sans-serif;
+        font-family: sans-serif;
     }
 </style>
 
@@ -28,15 +28,23 @@
     <hr>
     <h2> <a href="/search/genelist">View genelist for panel</a> </h2>
     <hr />
+    <h2>Apply Panel To Patient Sample</h2>
+    <p><i>Store information on which tests, gene panels, BED files,
+            reference sequences and versions which have
+            been applied to each patient case </i> </p>
+    <a href="/database/panel">
+        <button>Add Patient Information to Database</button>
+    </a>
+    <br>
     <h2>BED file download</h2>
     <p> To download a BED file for the selected panel please enter your search parameters
-        and click the download button below. 
+        and click the download button below.
         <br>
         The coordinates are taken from the MANE Select transcript of each gene.
         <br>
         <br>
     </p>
-    
+
     <form action="/search/download" method="post">
         <label for="build">Choose a genome build:</label>
         <select name="build" id="build">
@@ -53,15 +61,17 @@
         </select>
         <br>
         <br>
-        <label for="padding">Add upstream and downstream base pair padding to each exon or transcript coordinates?</label>
+        <label for="padding">Add upstream and downstream base pair padding to each exon or transcript
+            coordinates?</label>
         <select name="padding" id="padding">
             <option value="True">True</option>
             <option value="False">False</option>
         </select>
         <br>
         <br>
-        <label for="base_num">Select how many base pairs to pad upstream and downstream of the exons or transcript if required:</label>
-            <input type="number" id="base_num" name="base_num" placeholder="50" value="50">
+        <label for="base_num">Select how many base pairs to pad upstream and downstream of the exons or transcript if
+            required:</label>
+        <input type="number" id="base_num" name="base_num" placeholder="50" value="50">
         <br>
         <br>
         <input type="submit" value="Download BED File">
@@ -73,7 +83,7 @@
     <p> {{results.df.to_html() | safe}}</p>
     <hr>
     <br>
-    <button onclick="myFunction()" > Reveal all PanelApp information for {{results.panel_label}} panel</button>
+    <button onclick="myFunction()"> Reveal all PanelApp information for {{results.panel_label}} panel</button>
     <p id="demo"></p>
     <script>
         function myFunction() {

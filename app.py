@@ -6,7 +6,6 @@ from modules import ParserExcel, bedmake  # importing local modules ./modules/
 from AppBlueprints import database_blueprint
 
 
-
 """
 ## This is the main app file ##
 
@@ -15,6 +14,7 @@ this function is a factory function that creates the app.
 therefor, all other components are placed in blueprints and imported into this file
 
 """
+
 
 def create_app(test_config=None):
     """
@@ -54,7 +54,7 @@ def create_app(test_config=None):
     - the database blueprint (database page)
     - the Base blueprint (home page)
     """
-    
+
     # links the Base blueprint to the app
     app.register_blueprint(base, url_prefix='/')
     # links the database blueprint to the app
@@ -98,11 +98,12 @@ def test_data():
     This is the search page route, it renders the search.html template with
     the search form and a link to the home page using the Data
     """
+    session.clear()
     if request.method == 'POST':
         r_code = request.form.get('r')
         session['r'] = r_code.upper()
         if r_code:
-            # Create an object instance of the RCodeToBedFile class 
+            # Create an object instance of the RCodeToBedFile class
             # and fetch the panel info
             bedmake_object = bedmake.RCodeToBedFile(
                 r_code, ref_genome='GRCh38')
@@ -110,20 +111,26 @@ def test_data():
             panel_name = panel_information['name']
             panel_version = panel_information['version']
 
-            # Create an object instance of the Parser class 
+            # Create an object instance of the Parser class
             # and parse the NGTD excel file
             parsed_results_object = ParserExcel.Parser()
             filtered_NGTD = parsed_results_object.parse(r_code=r_code)
 
-            # Create a dictionary to pass to the results.html template 
+            # Create a dictionary to pass to the results.html template
             # for Jinja to render
             r_results_data = {"df": filtered_NGTD,
-                          "r_json": panel_information,
-                          "r": r_code.upper(),
-                          "panel_label": panel_name,
-                          "panel_version": panel_version}
+                              "r_json": panel_information,
+                              "r": r_code.upper(),
+                              "panel_label": panel_name,
+                              "panel_version": panel_version}
+            session['panel_name'] = panel_name
+            session['panel_version'] = panel_version
+            session['gene_list'] = [gene.get("gene_data", {}).get(
+                "gene_symbol", "") for gene in panel_information.get("genes", [])]
 
-            # if the api call has worked, render the results.html template 
+            # = panel_information.get( "genes", [{}])[0].get("gene_data", {}).get("gene_symbol", "")
+
+            # if the api call has worked, render the results.html template
             # with results data
             if panel_information:
                 return render_template("results.html", results=r_results_data)

@@ -25,9 +25,10 @@
         <tbody>
             {% for s in sample %}
             <tr>
-                <td>{{ s.sample_id }}</td>
-                <td>{{ s.sample_name }}</td>
-                <td>{{ s.sample_type }}</td>
+                <td>{{ s.patient_id }}</td>
+                <td>{{ s.patient_name }}</td>
+                <td>{{ s.which_testcase }}</td>
+                <td><a href="/sample/{{ s.patient_id }}">View</a></td>
             </tr>
             {% endfor %}
         </tbody>

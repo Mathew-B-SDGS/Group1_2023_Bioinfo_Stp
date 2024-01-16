@@ -1,9 +1,10 @@
 from __future__ import annotations
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, select, Column, ForeignKey, Integer, String, Float, Boolean
+from sqlalchemy import create_engine, select, Column, ForeignKey, Integer, String, Float, Boolean, JSON
 from sqlalchemy.orm import Session, DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
 from typing import Optional, List
+from datetime import datetime
 
 blueprint_db = Blueprint('database', __name__, url_prefix='/database')
 
@@ -17,15 +18,15 @@ db = SQLAlchemy(model_class=Base)
 
 
 class Sample(db.Model):
-    """table holds Batch details, for all samples processed in a run"""
+    """
+    table holds Batch details, for all samples processed in a run
+    Used to demonstrate Database functionality. 
+    """
     __tablename__ = "sample"
     sample_id: Mapped[int] = mapped_column(
         Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
     sample_name: Mapped[str] = mapped_column(String(30), nullable=False)
     sample_type: Mapped[str] = mapped_column(String(30), nullable=True)
-    # relationships
-    patient_relationship: Mapped[Patient] = relationship(
-        back_populates='patient_samples')
 
     def __repr__(self):
         return f"sample_id: {self.sample_id}, sample_name: {self.sample_name}"
@@ -36,15 +37,12 @@ class Patient(db.Model):
     __tablename__ = "patient"
 
     patient_id: Mapped[int] = mapped_column(
-        Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
+        primary_key=True, autoincrement=True, unique=True)
     patient_name: Mapped[str] = mapped_column(String(30), nullable=False)
-    patient_type: Mapped[str] = mapped_column(String(30), nullable=True)
 
     # relationships
-    patient_samples: Mapped[List['Sample']] = relationship(
-        'Sample', back_populates='patient_relationship')
-    run_testcases: Mapped[List['TestCase']] = relationship(
-        'TestCase', back_populates='patient')
+    which_testcase: Mapped[List['TestCase']] = relationship(
+        'TestCase', back_populates='which_patient')
 
     def __repr__(self):
         return f"patient_id: {self.patient_id}, patient_name: {self.patient_name}"
@@ -57,6 +55,13 @@ class TestType(db.Model):
         Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
     testtype_name: Mapped[str] = mapped_column(String(30), nullable=False)
     testtype_version: Mapped[str] = mapped_column(String(30), nullable=True)
+    testtype_rnumber: Mapped[str] = mapped_column(String(30), nullable=True)
+    # TODO think about how to store a list of genes, mabye a Json column?
+    list_of_genes: Mapped[dict[list]] = mapped_column(
+        type_=JSON, nullable=True)
+    # relationships
+    which_testcase: Mapped[List['TestCase']] = relationship(
+        'TestCase', back_populates='which_testtype')
 
     def __repr__(self):
         return f"testtype_id: {self.testtype_id}, testtype_name: {self.testtype_name}"
@@ -69,14 +74,18 @@ class TestCase(db.Model):
     testcase_id: Mapped[int] = mapped_column(
         Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
     date_of_test: Mapped[str] = mapped_column(String(30), nullable=False)
+    user: Mapped[str] = mapped_column(String(30), nullable=True)
     # foreign keys
-    Patient_id: Mapped[int] = mapped_column(
+    sample_id: Mapped[int] = mapped_column(
         (ForeignKey('patient.patient_id')), nullable=False)
     TestType_id: Mapped[int] = mapped_column(
         (ForeignKey('testtype.testtype_id')), nullable=False)
 
     # relationships
-    patient: Mapped = relationship('Patient', back_populates='testcase')
+    which_patient: Mapped[Patient] = relationship(
+        'Patient', back_populates='which_testcase')
+    which_testtype: Mapped[TestType] = relationship(
+        'TestType', back_populates='which_testcase')
 
     def __repr__(self):
         return f"testcase_id: {self.testcase_id}, date_of_test: {self.date_of_test}"
@@ -107,7 +116,7 @@ def hello():
 def sample_list():
     """list all samples in the database"""
     samples_list_db = db.session.execute(
-        db.select(Sample).order_by(Sample.sample_id)).scalars()
+        db.select(Patient).order_by(Patient.patient_id)).scalars()
     return render_template("sample_list_all.html", sample=samples_list_db)
 
 
@@ -115,7 +124,6 @@ def sample_list():
 def sample_create():
     """create a new sample in the database"""
     if request.method == "POST":
-
         # create a new sample object and add it to the database
         sample = Sample(
             sample_name=request.form["sample_name"].strip(),
@@ -125,3 +133,64 @@ def sample_create():
         db.session.commit()
         return redirect(url_for("database.sample_list"))
     return render_template("sample_create.html")
+
+
+@blueprint_db.route("/panel", methods=["GET", "POST"])
+def panels_choice():
+    """
+    Choose between creating a new patient or selecting an existing one
+    """
+    if request.method == "POST":
+        patient_add = Patient(
+            patient_name=request.form["patient_name"].strip(),
+            # which_testcase=TestCase(
+            #     date_of_test=datetime.today().date(),
+            #     user=request.form["user"].strip(),
+            #     which_patient=patient,
+            #     which_testtype=testtype
+            # )
+        )
+        db.session.add(patient_add)
+        db.session.commit()
+        some_patients = db.session.query(Patient.patient_name).all()
+        return render_template("panels_choice.html", patients_list=some_patients)
+    else:
+        # all_patients = db.session.execute(db.select(Patient).all)
+        some_patients = db.session.query(Patient.patient_name).all()
+        return render_template("panels_choice.html", patients_list=some_patients)
+
+
+@blueprint_db.route("/panel/create", methods=["GET", "POST"])
+def update_patient_panel():
+    """
+    add panel to patient details within database
+    """
+    r_number = session['r']
+    if request.method == "POST":
+
+        object_add = TestCase(
+            date_of_test=datetime.today().date(),
+            user=request.form["user"].strip(),
+            which_patient=Patient.query.filter_by(
+                patient_name=request.form["patient_selected"]).first(),
+            which_testtype=TestType(
+                testtype_name=session['panel_name'],
+                testtype_version=session['panel_version'],
+                testtype_rnumber=r_number,
+                list_of_genes=session['gene_list']
+            )
+
+        )
+        db.session.add(object_add)
+        db.session.commit()
+
+        return f"""Updated database for; {request.form['patient_selected']} with panel {r_number}
+        <br>
+        {session['panel_name']}
+         <br>
+        {session['panel_version'] }
+        <hr>
+        <p> detailed info: </p>
+        {session['gene_list']} 
+        <br><a href="/">Home</a>
+     """
