@@ -135,20 +135,21 @@ def sample_list_specific(sample_id):
     for result in results:
         print(result.__getattr__)
         print(result.__getattribute__)
-        list_test_details1.extend([result.TestType.testtype_name, result.TestType.testtype_version,
-                                  result.TestType.testtype_rnumber, result.TestType.list_of_genes])
+        list_test_details1.extend(["Disease Name = " + result.TestType.testtype_name, "Panel Version = " + result.TestType.testtype_version,
+                                  "R Number =" + result.TestType.testtype_rnumber, "Gene List = " + str(result.TestType.list_of_genes)])
         list_test_details2.extend(
-            [result.Patient.patient_id, result.Patient.patient_name])
+            ["Database ID:" + str(result.Patient.patient_id), "Patient Name:" + result.Patient.patient_name])
         list_test_details3.extend(
-            [result.TestCase.testcase_id, result.TestCase.date_of_test, result.TestCase.user])
+            ["Test ID"+str(result.TestCase.testcase_id), "Date of Test:"+str(result.TestCase.date_of_test), "Scientist:"+str(result.TestCase.user)])
 
     # could be scalar or scalars or .all()
 
     return f"""<h1>Detailed List</h1><br>
-        <h3>Testing details</h3><br>{list_test_details3}<hr>
-        <h3>Patient details</h3><br>{list_test_details2}<hr>
-        <h3>Panel details</h3><br>{list_test_details1}<hr>
-        <br><a href="/database/Samples">Back</a>
+        <h3>Laboratory details</h3>{list_test_details3}<hr><br>
+        <h3>Patient details</h3>{list_test_details2}<hr><br>
+        <h3>Panel details</h3>{list_test_details1}<hr><br>
+        <br><a href="/database/samples">Back</a>
+        <a href="/">Home</a>
         """
 
 
@@ -174,14 +175,7 @@ def panels_choice():
     """
     if request.method == "POST":
         patient_add = Patient(
-            patient_name=request.form["patient_name"].strip(),
-            # which_testcase=TestCase(
-            #     date_of_test=datetime.today().date(),
-            #     user=request.form["user"].strip(),
-            #     which_patient=patient,
-            #     which_testtype=testtype
-            # )
-        )
+            patient_name=request.form["patient_name"].strip(),)
         db.session.add(patient_add)
         db.session.commit()
         some_patients = db.session.query(Patient.patient_name).all()
@@ -225,39 +219,5 @@ def update_patient_panel():
         <p> detailed info: </p>
         {session['gene_list']} 
         <br><a href="/">Home</a>
+        <br><a href="/database/panel">View Database</a>
      """
-
-    # test_case_list = db.session.select(Patient).filter(
-    #     Patient.patient_id == sample_id).all()
-
-    # new_list = test_case_list.join(TestCase).join(
-    #     TestType)
-# stmnt = select(Patient).where(Patient.patient_id == sample_id).add_columns(TestCase.date_of_test, TestCase.user,
-#                                                                                TestType.testtype_name, TestType.testtype_version, TestType.testtype_rnumber, TestType.list_of_genes)
-
-    # some_patients = db.session.query(Patient).where(Patient.patient_id == sample_id)\
-    #     .join(TestCase, Patient.patient_id == TestCase.sample_id)\
-    #     .join(TestType, TestType.testtype_id == TestCase.TestType_id)\
-    #     .all()
-
-
-# @blueprint_db.route("/samples/<int:sample_id>")
-# def sample_detail(sample_id):
-#     """show a single sample"""
-#     sample = db.session.execute(
-#         db.select(Patient).where(Patient.patient_id == sample_id)).scalars().first()
-#     return f"""<h1>sample Details </h1> <br>
-#         {sample.which_testcase}"""
-
-# @blueprint_db.route("/samples/<int:sample_id>")
-# def sample_detail(sample_id):
-#     """Show a single sample"""
-#     sample = db.session.execute(
-#         select(Patient).where(Patient.patient_id == sample_id)
-#     ).scalars().first()
-
-#     if sample:
-#         return f"""<h1>Sample Details</h1> <br>
-#                    Test Case: {sample.which_testcase}"""
-#     else:
-#         return "Error fetching Sample from Database",
