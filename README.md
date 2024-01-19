@@ -17,12 +17,18 @@ Their are several ways to install the required software. The easiest way is to u
 
 - To install the required software using the requirements.txt file run the following commands in the terminal 
 ```
-python3 -m venv myenv
+python -m venv myenv
 source myenv/Scripts/activate
 pip install -r requirements.txt
 ```
 
-
+- To use pyproject.toml, run the following commands in the terminal. this will install a .egg-info file in the repository.
+(the little "." at the end of the command is important)
+```
+python -m venv myenv
+source myenv/Scripts/activate
+pip install .
+```
 
 
 - This will work on Mac OS X or Linux operating systems 
