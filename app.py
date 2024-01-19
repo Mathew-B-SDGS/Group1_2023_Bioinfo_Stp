@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, session, Response, Blueprint
 import os
 from appblueprints import database_blueprint
 from modules import bedmake, parser_test_directory  # importing local modules ./modules/
-# importing local blueprints ./AppBlueprints/
+# importing local blueprints 
 from appblueprints import database_blueprint
 
 
@@ -11,7 +11,8 @@ from appblueprints import database_blueprint
 
 containing the create_app function and all the app routes.
 this function is a factory function that creates the app.
-therefor, all other components are placed in blueprints and imported into this file
+therefore, all other components are placed in blueprints and imported into 
+this file
 
 """
 
@@ -19,8 +20,8 @@ therefor, all other components are placed in blueprints and imported into this f
 def create_app(test_config=None):
     """
     This is a factory function that creates the app, changed to this as it
-    is more flexible an allows us to change things in the config file without 
-    having to change the code in this file. 
+    is more flexible an allows us to change things in the config file 
+    without having to change the code in this file. 
     its also better if we want to deploy it anywhere else
     """
 
@@ -66,7 +67,7 @@ def create_app(test_config=None):
     database_blueprint.db.init_app(app)
     database_blueprint.create_tables(app.app_context(), database_blueprint.db)
 
-    # finnish the factory function by returning the app
+    # finish the factory function by returning the app
     return app
 
 
