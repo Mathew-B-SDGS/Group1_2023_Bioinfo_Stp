@@ -1,9 +1,9 @@
 from flask import Flask, request, render_template, session, Response, Blueprint
 import os
-from AppBlueprints import database_blueprint
-from modules import ParserExcel, bedmake  # importing local modules ./modules/
+from appblueprints import database_blueprint
+from modules import bedmake, parser_test_directory  # importing local modules ./modules/
 # importing local blueprints ./AppBlueprints/
-from AppBlueprints import database_blueprint
+from appblueprints import database_blueprint
 
 
 """
@@ -113,7 +113,7 @@ def test_data():
 
             # Create an object instance of the Parser class
             # and parse the NGTD excel file
-            parsed_results_object = ParserExcel.Parser()
+            parsed_results_object = parser_test_directory.Parser()
             filtered_NGTD = parsed_results_object.parse(r_code=r_code)
 
             # Create a dictionary to pass to the results.html template

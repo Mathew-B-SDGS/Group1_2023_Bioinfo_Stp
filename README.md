@@ -8,19 +8,34 @@
 - Mathew 
 
 #### Installation 
+ 
+- Clone the repository using the following command 
+```
+git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
+```
+Their are several ways to install the required software. The easiest way is to use the requirements.txt file. This will install all the required software in a virtual environment. other enviroment files are included in the repository: such as #TODO: add other enviroment files.
+
+- To install the required software using the requirements.txt file run the following commands in the terminal 
+```
+python3 -m venv myenv
+source myenv/Scripts/activate
+pip install -r requirements.txt
+```
+
+
+
+
 - This will work on Mac OS X or Linux operating systems 
 - Required Software: Please see requirements.txt 
 
 #### Usage 
-- Run the Code from the Command line using the following command
-```
-python3 main.py rnumber --outputfile
-```
+
 - To Spin up the Flask App run the following command
 ```
 flask --app app run 
 ```
 ##### Go to http://localhost:5000 to view the app 
+##### OR check your Local app.log file for the URL to view the app
 
 
 ##### Features

@@ -1,6 +1,6 @@
 import requests
 import logging.config
-from settings import LOGGING_CONFIG
+from modules.settings import LOGGING_CONFIG
 
 # Configure logging from settings.py
 logging.config.dictConfig(LOGGING_CONFIG)
