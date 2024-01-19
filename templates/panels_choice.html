@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Samples</title>
+</head>
+
+<body>
+    <h1>Link a Patient Sample to R-number</h1>
+    <hr>
+    <h3>Select Patient Details</h3>
+    <p>Patient Details Can be added to the database Below</p>
+    <form method="post" action="{{ url_for('database.update_patient_panel') }}">
+        <label for="patientDropdown">Select a patient:</label>
+        <select id="patientDropdown" name="patient_selected">
+            {% for patient in patients_list %}
+            <option value="{{ patient[0] }}">{{ patient[0] }}</option>
+            {% endfor %}
+            <span id="nameError" class="error"></span><br>
+        </select>
+        <p>Enter assigned scientist Name</p>
+        <label for="user">User:</label>
+        <input type="text" id="user" name="user" required>
+        <span id="userError" class="error"></span><br>
+
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            var patient_selected = document.getElementById('patient_selected').value;
+            var user = document.getElementById('user').value;
+
+            var nameError = document.getElementById('nameError');
+            var userError = document.getElementById('userError');
+
+            // Reset error messages
+            nameError.innerHTML = "";
+            userError.innerHTML = "";
+
+            // Check if name is empty
+            if (patient_selected === "") {
+                nameError.innerHTML = "Name is required";
+                return false;
+            }
+
+            // Check if email is empty
+            if (user === "") {
+                userError.innerHTML = "Email is required";
+                return false;
+            }
+
+            // You can add additional validation rules here if needed
+
+            // If all validations pass, the form can be submitted
+            return true;
+        }
+    </script>
+
+
+
+
+    <hr>
+    <p>patients= {{patients_list}}</p>
+    <h3>Or Create a New Patient</h3>
+    <form method="POST" action="/database/panel">
+        <label for="patient_name">Patient Name:</label>
+        <input type="text" id="patient_name" name="patient_name" required>
+        <br>
+
+        <button type="submit">Create Patient</button>
+    </form>
+    <br>
+    <p>reload page to view added patients</p>
+    <button><a href="/database/panel">reload</a></button>
+
+</body>
+
+</html>
+
+<!-- <label for="patients">Select Patient from Database:</label>
+    <select name="Patient" id="Patient">
+        <option value="Test">Test</option>
+        {% for patient in patient_list %}
+        <option value="{{patient[0]}}">{{patient[0]}}</option>
+        {% endfor %}
+    </select> -->
