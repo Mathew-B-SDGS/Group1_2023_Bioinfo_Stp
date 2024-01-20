@@ -8,6 +8,7 @@ Welcome to Group1_2023_Bioinfo_Stp's Documentation!
 
 .. toctree::
    :maxdepth: 2
+
    Installation
    Support
    Features
