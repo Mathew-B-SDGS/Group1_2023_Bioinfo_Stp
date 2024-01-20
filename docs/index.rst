@@ -8,7 +8,9 @@ Welcome to Group1_2023_Bioinfo_Stp's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   Installation
+   Support
 
 
 
