@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Group1_2023_Bioinfo_Stp's documentation!
+Welcome to Group1_2023_Bioinfo_Stp's Documentation!
 ===================================================
 
 .. toctree::
