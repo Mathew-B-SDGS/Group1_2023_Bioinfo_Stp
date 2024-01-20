@@ -11,6 +11,7 @@ Welcome to Group1_2023_Bioinfo_Stp's documentation!
 
    Installation
    Support
+   Features
 
 
 
@@ -19,4 +20,5 @@ Contents
 
 * :ref:`Installation`
 * :ref:`Support`
+* :ref:`Features`
 * :ref:`Search`
