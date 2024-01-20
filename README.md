@@ -13,7 +13,7 @@
 ```
 git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
 ```
-Their are several ways to install the required software. The easiest way is to use the requirements.txt file. This will install all the required software in a virtual environment. other enviroment files are included in the repository: such as #TODO: add other enviroment files.
+Their are several ways to install the required software. The easiest way is to use the requirements.txt file. This will install all the required software in a virtual environment. other environment files are included in the repository: such as #TODO: add other enviroment files.
 
 - To install the required software using the requirements.txt file run the following commands in the terminal 
 ```
@@ -43,6 +43,7 @@ flask --app app run
 ##### Go to http://localhost:5000 to view the app 
 ##### OR check your Local app.log file for the URL to view the app
 
+### For Readthedocs go to: https://group1-2023-bioinfo-stp.readthedocs.io
 
 ##### Features
 
