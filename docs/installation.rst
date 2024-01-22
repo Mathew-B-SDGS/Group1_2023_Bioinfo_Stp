@@ -1,5 +1,11 @@
-Local installation without Docker
+Installation
 ===================================================
+
+Local setup without Docker
+------
+This will work on Mac OS X or Linux operating systems
+Required Software: Please see requirements.txt
+
 Clone the repository using the following command::
 
     git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
@@ -13,20 +19,38 @@ To install the required software using the requirements.txt file, run the follow
     pip install -r requirements.txt
 
 
-To use pyproject.toml, run the following commands in the terminal. this will install a .egg-info file in the repository. (the little "." at the end of the command is important)::
+To use pyproject.toml, run the following commands in the terminal, this will install a .egg-info file in the repository. (the little "." at the end of the command is important)::
 
     python -m venv myenv
     source myenv/Scripts/activate
     pip install .
 
 
-- This will work on Mac OS X or Linux operating systems
-- Required Software: Please see requirements.txt
+Usage: To Spin up the Flask App run the following command::
 
-- Usage: To Spin up the Flask App run the following command:
+    flask --app app run 
 
-flask --app app run 
+Go to http://localhost:5000 to view the app
 
-- Go to http://localhost:5000 to view the app
 
-- Running in Docker : Please refer to DOCKER.md
+Setup within a Docker container
+------
+
+Clone the repository using the following command::
+
+    git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
+
+Build the Docker image using the Dockerfile, first ensure you are in the root level of the repository before running::
+
+    docker build -t panel_flask_app .
+
+Spin up the Docker image into a Docker container::
+
+    docker run -p 5000:5000 panel_flask_app
+
+This will start the container, go to http://localhost:5000 to view the app
+
+*Please refer to app.log to help you debug if you are unable to bring up the log, or a search brings up no results when they are expected*
+
+*Please note the panel search requires an internet connection to be performed*
+

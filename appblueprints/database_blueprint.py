@@ -104,9 +104,13 @@ def create_tables(context, db):
 def hello():
     """Landing page for the database blueprint" """
     return """
+    <style>
+    * {
+      font-family: sans-serif;
+    }
+    </style>
     <h1>Database</h1><br>
-    <p>this module is for accessing the Database</p><br>
-    <p>click below to go to view or add samples</p><br>
+    <p>Click below to go to view or add samples</p><br>
     <a href="/database/samples">View All</a><br>
     <a href="/database/samples/create">Add Sample</a><br>
     """
