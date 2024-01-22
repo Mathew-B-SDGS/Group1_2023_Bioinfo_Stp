@@ -9,14 +9,15 @@ Welcome to Group1_2023_Bioinfo_Stp's Documentation!
 .. toctree::
    :maxdepth: 2
 
-   Installation
+   Installation, including within a Docker container
+   PanelSearcher Features
    Support
-   Features
 
 Contents
 ==================
 
-* :ref:`Installation`
+* :ref:`installation`
 * :ref:`Support`
-* :ref:`Features`
+* :ref:`features`
 * :ref:`Search`
+* :
