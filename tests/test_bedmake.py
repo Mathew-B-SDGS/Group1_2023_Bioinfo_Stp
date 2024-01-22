@@ -16,7 +16,7 @@ class TestBedmake():
         self.get_coords = self.bedmake.get_coords_for_bed()
 
     def test_get_panel_for_genomic_test(self):
-        """Check that the correct panel is retrieevd from the PanelApp API
+        """Check that the correct panel is retrievd from the PanelApp API
         by checking the panel ID for R207"""
         panel = self.bedmake.get_panel_for_genomic_test()
         assert panel['id'] == 143
@@ -26,6 +26,7 @@ class TestBedmake():
         genes = self.bedmake.extract_genes_hgnc()
         regex = r"^HGNC:\d*"
         for gene in genes:
+            gene = gene[0]
             assert re.match(regex, gene)
 
     def test_get_coords_for_bed(self):
@@ -52,6 +53,3 @@ class TestBedmake():
         string_bed = self.bedmake.create_string_bed()
         assert type(string_bed) is str
 
-
-
-    

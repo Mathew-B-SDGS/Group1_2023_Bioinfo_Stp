@@ -12,6 +12,7 @@ Welcome to PanelSearcher's Documentation!
 
    installation
    testing
+   resources
    changelog
 
 

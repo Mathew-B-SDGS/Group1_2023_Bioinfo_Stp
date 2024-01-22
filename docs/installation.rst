@@ -1,4 +1,4 @@
-Installation
+Installation and set up
 ===================================================
 
 Local setup without Docker
@@ -50,7 +50,11 @@ Spin up the Docker image into a Docker container::
 
 This will start the container, go to http://localhost:5000 to view the app
 
-*Please refer to app.log to help you debug if you are unable to bring up the log, or a search brings up no results when they are expected*
+Bringing the app down
+------
+To bring the app down use Ctrl+C on the terminal where the app was set up.
+
+*Please refer to app.log to help you debug if you are unable to bring up the app, or a search brings up no results when they are expected*
 
 *Please note the panel search requires an internet connection to be performed*
 
