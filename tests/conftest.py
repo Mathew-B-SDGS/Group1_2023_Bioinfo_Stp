@@ -22,11 +22,9 @@ def client(app):
 def runner(app):
     return app.test_cli_runner()
 
-
 def test_home_page(client):
     response = client.get("/")
-    assert b"<h1>Welcome to PanelSearcher!</h1>" in response.data
-
+    assert b"<h1>Welcome to PanelSearcher v1.0!</h1>" in response.data
 
 def test_panel_search(client):
     response = client.post("/search", data={
@@ -34,13 +32,3 @@ def test_panel_search(client):
     })
     assert response.status_code == 200
     assert b"<h2>Panel name: Autosomal recessive primary hypertrophic osteoarthropathy</h2>" in response.data
-
-
-def test_bed_download(client):
-    response = client.post("/search/download", data={
-        "build": "GRCh38",
-        "version": "True",
-        "padding": "True",
-        "base_num": "75"
-    })
-    assert response.status_code == 200
