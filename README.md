@@ -18,7 +18,6 @@ please find links to the User Guide and Install Guide below
 ## link to userguide.md :  [User Guide](/USERGUIDE.md)
 ## link to install.md : [Install Guide](/INSTALL.md)
  
-
 #### Usage
 - To Spin up the Flask App run the following command on the command line. 
 ```
