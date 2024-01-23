@@ -29,7 +29,7 @@ jobs:
         pip install pytest
     - name: Launch app
       run: |
-      flask --app app run
+        flask --app app run
     - name: Test with pytest
       run: |
         pytest tests/*
