@@ -27,15 +27,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest
-#    - name: Launch app
- #     run: |
-#        nohup flask --app app run
     - name: Test with pytest
       run: |
         pytest tests/*
-   - uses: actions/upload-artifact@v3
-    if: always()
-     with:
-      name: playwright-report
-       path: playwright-report/
-       retention-days: 30
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
