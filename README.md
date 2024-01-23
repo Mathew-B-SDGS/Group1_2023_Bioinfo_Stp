@@ -14,43 +14,13 @@ this Web app can be Locally hosted and run from a local machine or it can be run
 - Sadie 
 - Mathew 
 
-#### Installation 
+#### Getting Started and Installation 
+
+link to userguide.md :  [User Guide](/USERGUIDE.md)
+link to install.md : [Install Guide](/INSTALL.md)
  
-- Clone the repository using the following command 
-```
-git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
-```
-Their are several ways to install the required software. The easiest way is to use the requirements.txt file. This will install all the required software in a virtual environment. other environment files are included in the repository: such as #TODO: add other enviroment files.
-
-
-- To install the required software using the requirements.txt file run the following commands in the terminal 
-```
-python -m venv myenv
-source myenv/Scripts/activate
-
-pip install -r requirements.txt
-```
-
-- To use pyproject.toml, run the following commands in the terminal. this will install a .egg-info file in the repository.
-(the little "." at the end of the command is important)
-```
-python -m venv myenv
-source myenv/Scripts/activate
-
-pip install .
-```
-
-- This will work on Mac OS X or Linux operating systems 
-- In Some Use Cases the command "python3" must be used to create the virtual environment and run the app.
-
-```
-python3 -m venv myenv
-source myenv/bin/activate
-```
 
 #### Usage
-after downloading the repository and installing the required software, follow the instructions below to run the app.
-
 - To Spin up the Flask App run the following command on the command line. 
 ```
 flask --app app run 
