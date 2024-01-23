@@ -51,3 +51,5 @@ readme = "README.md"
 Homepage = "http://localhost:5000"
 Documentation = "https://group1-2023-bioinfo-stp.readthedocs.io/en/latest/"
 Repository = "https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/"
+
+[project.scripts]
