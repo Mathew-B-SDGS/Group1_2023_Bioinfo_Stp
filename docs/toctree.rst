@@ -2,6 +2,6 @@
       .. toctree::
          :maxdepth: 2
 
-      Index
-      Installation
-      Support 
+         Index
+         Installation
+         Support 

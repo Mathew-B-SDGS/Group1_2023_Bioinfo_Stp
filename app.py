@@ -1,37 +1,37 @@
 from flask import Flask, request, render_template, session, Response, Blueprint
 import os
-from AppBlueprints import database_blueprint
-from modules import ParserExcel, bedmake  # importing local modules ./modules/
-# importing local blueprints ./AppBlueprints/
-from AppBlueprints import database_blueprint
-
+from appblueprints import database_blueprint
+from modules import bedmake, parser_test_directory  # importing local modules ./modules/
+# importing local blueprints 
+from appblueprints import database_blueprint
 
 
 """
-## This is the main app file ##
+## THIS IS THE MAIN APP FILE ##
 
-containing the create_app function and all the app routes.
-this function is a factory function that creates the app.
-therefor, all other components are placed in blueprints and imported into this file
+containing the create_app factory function and all the app routes.
+this project uses the flask framework to create a web app that allows users to
+search for an R number and download a bed file of the genes in the panel
 
+database functionality is in a blueprint in the appblueprints folder. 
 """
+
 
 def create_app(test_config=None):
     """
     This is a factory function that creates the app, changed to this as it
-    is more flexible an allows us to change things in the config file without 
-    having to change the code in this file. 
+    is more flexible an allows us to change things in the config file 
+    without having to change the code in this file. 
     its also better if we want to deploy it anywhere else
     """
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        # a default secret that should be overridden by instance config.
-        SECRET_KEY='GoldSilverMoonStreamWoodpecker',
+        SECRET_KEY='GoldSilverMoonStreamWoodpecker', #this is the secret key for the app, it is used to keep the client-side sessions secure
     )
-    # set the database path to the project.db file
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db' # set the database path to the project.db file
+
 
     # ensure the instance folder exists
     if test_config is None:
@@ -54,7 +54,7 @@ def create_app(test_config=None):
     - the database blueprint (database page)
     - the Base blueprint (home page)
     """
-    
+
     # links the Base blueprint to the app
     app.register_blueprint(base, url_prefix='/')
     # links the database blueprint to the app
@@ -66,7 +66,7 @@ def create_app(test_config=None):
     database_blueprint.db.init_app(app)
     database_blueprint.create_tables(app.app_context(), database_blueprint.db)
 
-    # finnish the factory function by returning the app
+    # finish the factory function by returning the app
     return app
 
 
@@ -98,11 +98,12 @@ def test_data():
     This is the search page route, it renders the search.html template with
     the search form and a link to the home page using the Data
     """
+    session.clear()
     if request.method == 'POST':
         r_code = request.form.get('r')
         session['r'] = r_code.upper()
         if r_code:
-            # Create an object instance of the RCodeToBedFile class 
+            # Create an object instance of the RCodeToBedFile class
             # and fetch the panel info
             bedmake_object = bedmake.RCodeToBedFile(
                 r_code, ref_genome='GRCh38')
@@ -110,20 +111,26 @@ def test_data():
             panel_name = panel_information['name']
             panel_version = panel_information['version']
 
-            # Create an object instance of the Parser class 
+            # Create an object instance of the Parser class
             # and parse the NGTD excel file
-            parsed_results_object = ParserExcel.Parser()
+            parsed_results_object = parser_test_directory.Parser()
             filtered_NGTD = parsed_results_object.parse(r_code=r_code)
 
-            # Create a dictionary to pass to the results.html template 
+            # Create a dictionary to pass to the results.html template
             # for Jinja to render
             r_results_data = {"df": filtered_NGTD,
-                          "r_json": panel_information,
-                          "r": r_code.upper(),
-                          "panel_label": panel_name,
-                          "panel_version": panel_version}
+                              "r_json": panel_information,
+                              "r": r_code.upper(),
+                              "panel_label": panel_name,
+                              "panel_version": panel_version}
+            session['panel_name'] = panel_name
+            session['panel_version'] = panel_version
+            session['gene_list'] = [gene.get("gene_data", {}).get(
+                "gene_symbol", "") for gene in panel_information.get("genes", [])]
 
-            # if the api call has worked, render the results.html template 
+            # = panel_information.get( "genes", [{}])[0].get("gene_data", {}).get("gene_symbol", "")
+
+            # if the api call has worked, render the results.html template
             # with results data
             if panel_information:
                 return render_template("results.html", results=r_results_data)

@@ -1,5 +1,13 @@
 import requests
+import logging.config
+from modules.settings import LOGGING_CONFIG
 
+# Configure logging from settings.py
+logging.config.dictConfig(LOGGING_CONFIG)
+
+# The logging module
+logger = logging.getLogger(__name__)
+logger.debug('This is a debug message')
 
 class RCodeToBedFile():
     """Takes a GMS R code (e.g. R169), a reference genome
@@ -40,16 +48,16 @@ class RCodeToBedFile():
             panel_endpoint = panel_api_url + self.test_code + "/"
             response = requests.get(panel_endpoint)
             if response.status_code == 200:
-                print(f"Successfully retrieved panel for {self.test_code}")
+                logger.info(f"Successfully retrieved panel for {self.test_code}")
                 return response.json()
             elif response.json()["detail"] == "Not found.":
-                print(f"Panel for {self.test_code} not found")
+                logger.warning(f"Panel for {self.test_code} not found")
                 raise
             else:
-                print(f"Failed to retrieve panels querying the PanelApp API using"
+                logger.error(f"Failed to retrieve panels querying the PanelApp API using"
                       f" {self.test_code}")
         except Exception as e:
-            print(self.__str__() + f"\nError: {str(e)}")
+            logger.error(self.__str__() + f"\nError: {str(e)}")
             raise
 
     def extract_genes_hgnc(self):
@@ -111,10 +119,10 @@ class RCodeToBedFile():
                         transcript_coords.append(chrom_start_end)
                     all_gene_coords.append(transcript_coords)
                 else:
-                    print("Failed to recieve response from Variant Validator API")
+                    logging.error("Failed to recieve response from Variant Validator API")
             return all_gene_coords
         except Exception as e:
-            print(self.__str__() + f"\nError: {str(e)}")
+            logger.error(self.__str__() + f"\nError: {str(e)}")
             raise
 
     def pad_bed_files(self):
@@ -134,7 +142,7 @@ class RCodeToBedFile():
                             [str(chrom), int(start), int(end)])
             return coords_for_bed
         except Exception as e:
-            print(self.__str__() + f"\nError: {str(e)}")
+            logging.error(self.__str__() + f"\nError: {str(e)}")
             raise
 
     def create_string_bed(self):
@@ -149,7 +157,7 @@ class RCodeToBedFile():
                 bed_file_string += f"{line[0]}\t{line[1]}\t{line[2]}\n"
             return str(bed_file_string)
         except Exception as e:
-            print(self.__str__() + f"\nError: {str(e)}")
+            logging.error(self.__str__() + f"\nError: {str(e)}")
             raise
 
     def __repr__(self):
