@@ -7,13 +7,13 @@ from appblueprints import database_blueprint
 
 
 """
-## This is the main app file ##
+## THIS IS THE MAIN APP FILE ##
 
-containing the create_app function and all the app routes.
-this function is a factory function that creates the app.
-therefore, all other components are placed in blueprints and imported into 
-this file
+containing the create_app factory function and all the app routes.
+this project uses the flask framework to create a web app that allows users to
+search for an R number and download a bed file of the genes in the panel
 
+database functionality is in a blueprint in the appblueprints folder. 
 """
 
 
@@ -28,11 +28,10 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        # a default secret that should be overridden by instance config.
-        SECRET_KEY='GoldSilverMoonStreamWoodpecker',
+        SECRET_KEY='GoldSilverMoonStreamWoodpecker', #this is the secret key for the app, it is used to keep the client-side sessions secure
     )
-    # set the database path to the project.db file
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db' # set the database path to the project.db file
+
 
     # ensure the instance folder exists
     if test_config is None:
