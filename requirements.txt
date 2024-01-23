@@ -1,3 +1,4 @@
+pytest==7.2.0
 blinker==1.7.0
 certifi==2023.7.22
 charset-normalizer==3.3.2

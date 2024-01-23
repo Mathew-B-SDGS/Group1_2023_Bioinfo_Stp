@@ -11,8 +11,9 @@ Welcome to PanelSearcher's Documentation!
    :caption: content
 
    installation
-   testing
    resources
+   database
+   testing
    changelog
 
 
