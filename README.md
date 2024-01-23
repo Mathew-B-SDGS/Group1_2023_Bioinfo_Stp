@@ -10,14 +10,13 @@ this Web app can be Locally hosted and run from a local machine or it can be run
 - [x] Store Patient Data within Database
 
 ### Team Members
-- Huma
-- Sadie 
-- Mathew 
+- Huma Z
+- Sadie A
+- Mathew B
 
-#### Getting Started and Installation 
-
-link to userguide.md :  [User Guide](/USERGUIDE.md)
-link to install.md : [Install Guide](/INSTALL.md)
+please find links to the User Guide and Install Guide below 
+## link to userguide.md :  [User Guide](/USERGUIDE.md)
+## link to install.md : [Install Guide](/INSTALL.md)
  
 
 #### Usage
