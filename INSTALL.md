@@ -65,7 +65,7 @@ This will start the container, go to http://localhost:5000 to view the app
 
 To bring the app down use ```Ctrl+C``` on the terminal where the app was set up.
 
-
+## Debugging
 
 *Please refer to app.log to help you debug if you are unable to bring up the app, or a search brings up no results when they are expected*
 
