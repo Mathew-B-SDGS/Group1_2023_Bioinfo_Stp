@@ -1,57 +1,58 @@
-# Install Guide
+# Installation and set up
 
-Home Page: [README.md](/README.md)
+## Local setup without Docker
 
-For detailed documentation go to: https://group1-2023-bioinfo-stp.readthedocs.io/
+This will work on Mac OS X or Linux operating systems
+Required Software: Please see requirements.txt
 
-## Table of Contents
-- [clone the repository](#clone-the-repository) 
-- [requirements.txt](#requirements.txt)
-- [pyproject.toml](#pyproject.toml)
-- [run the app](#run-the-app)
-- [Docker](#docker)
-
-
-##### Clone the repository 
+Clone the repository using the following command
 ```
-git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
+    git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
 ```
-Their are several ways to install the required software.
-The easiest way is to use eithe the requirements.txt or pyproject.toml file.
-This will install all the required software in a virtual environment. 
+There are several ways to install the required software. The easiest way is to use the requirements.txt file. This will install all the required software in a virtual environment.
 
-##### requirements.txt
-- To install the required software using the requirements.txt file run the following commands in the terminal 
+To install the required software using the requirements.txt file, run the following commands in the terminal
 ```
-python -m venv myenv
-source myenv/Scripts/activate
-pip install -r requirements.txt
-```
-##### pyproject.toml
-- To use pyproject.toml, run the following commands in the terminal. this will install a .egg-info file in the repository.
-(the little "." at the end of the command is important)
-```
-python -m venv myenv
-source myenv/Scripts/activate
-pip install .
+    python -m venv myenv    
+    source myenv/Scripts/activate
+    pip install -r requirements.txt
 ```
 
-- This will work on Mac OS X or Linux operating systems 
-- In Some Use Cases the command "python3" must be used to create the virtual environment and run the app.
-
+To use pyproject.toml, run the following commands in the terminal, this will install a .egg-info file in the repository. (the little "." at the end of the command is important)
 ```
-python3 -m venv myenv
-source myenv/bin/activate
+    python -m venv myenv
+    source myenv/Scripts/activate
+    pip install .
 ```
 
-##### run the app
-- after Dowloading the repository and installing the required software, Run the following command on the command line. 
+Usage: To Spin up the Flask App run the following command
 ```
-flask --app app run 
+    flask --app app run 
 ```
-#### Go to http://localhost:5000 to view the app
-
-# Docker
+Go to http://localhost:5000 to view the app
 
 
-Home Page: [README.md](/README.md)
+## Setup within a Docker container
+
+
+Clone the repository using the following command::
+```
+    git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
+```
+Build the Docker image using the Dockerfile, first ensure you are in the root level of the repository before running
+```
+    docker build -t panel_flask_app .
+```
+Spin up the Docker image into a Docker container
+```
+    docker run -p 5000:5000 panel_flask_app
+```
+This will start the container, go to http://localhost:5000 to view the app
+
+Bringing the app down
+
+To bring the app down use Ctrl+C on the terminal where the app was set up.
+
+*Please refer to app.log to help you debug if you are unable to bring up the app, or a search brings up no results when they are expected*
+
+*Please note the panel search requires an internet connection to be performed*
