@@ -7,7 +7,8 @@ Required Software: Please see requirements.txt
 
 Clone the repository using the following command:
 
-```git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
+```
+   git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
 ```
 
 There are several ways to install the required software. The easiest way is to use the requirements.txt file. This will install all the required software in a virtual environment.
