@@ -1,5 +1,9 @@
 # Installation and set up
 
+Home Page: [README.md](/README.md)
+
+For detailed documentation go to: https://group1-2023-bioinfo-stp.readthedocs.io/
+
 ## Local setup without Docker
 
 This will work on Mac OS X or Linux operating systems
@@ -11,9 +15,9 @@ Clone the repository using the following command:
    git clone https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp.git
 ```
 
-There are several ways to install the required software. The easiest way is to use the requirements.txt file. This will install all the required software in a virtual environment.
+There are two ways to install the required software. This will install all the required software in a virtual environment.
 
-To install the required software using the requirements.txt file, run the following commands in the terminal:
+To install the required software using the **requirements.txt file**, run the following commands in the terminal:
 
 ```
    python -m venv myenv
@@ -21,7 +25,7 @@ To install the required software using the requirements.txt file, run the follow
    pip install -r requirements.txt
 ```
 
-To use pyproject.toml, run the following commands in the terminal, this will install a .egg-info file in the repository. (the little "." at the end of the command is important):
+To use **pyproject.toml**, run the following commands in the terminal, this will install a .egg-info file in the repository. (the little "." at the end of the command is important):
 
 ```
    python -m venv myenv
@@ -29,7 +33,9 @@ To use pyproject.toml, run the following commands in the terminal, this will ins
    pip install .
 ```
 
-Usage: To Spin up the Flask App run the following command:
+*Please not ```python3``` made by required within the command in place of ```python```*
+
+Usage: After the required software has been installed, to spin up the Flask App run the following command:
 
   ```
       flask --app app run

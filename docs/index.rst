@@ -27,6 +27,10 @@ versions.
 
 *PanelSearcher is currently using the National Genomic Test Directory Version 5.1 (updated 1st June 2023). This will need to be updated upon release of the new version*
 
+Technical features
+==================
+PanelSearcher is a flask app which contains a panel search function and an SQL database.
+
 Support
 ==================
 Source code is available at : https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/ 
