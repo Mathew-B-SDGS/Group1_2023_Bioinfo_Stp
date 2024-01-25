@@ -1,4 +1,4 @@
-# Installation and set up
+# Installation and Set Up
 
 Home Page: [README.md](/README.md)
 
