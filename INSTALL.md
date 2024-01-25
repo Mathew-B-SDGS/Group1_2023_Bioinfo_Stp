@@ -61,7 +61,7 @@ Spin up the Docker image into a Docker container:
 
 This will start the container, go to http://localhost:5000 to view the app
 
-##Bringing the app down
+## Bringing the app down
 
 To bring the app down use ```Ctrl+C``` on the terminal where the app was set up.
 
