@@ -21,7 +21,7 @@ Please find links to the User Guide and Installation Guide below:
 ## Link to userguide.md :  [User Guide](/USERGUIDE.md)
 ## Link to install.md : [Installation Guide](/INSTALL.md)
 
-To see the documentation in readthedocs go to: https://group1-2023-bioinfo-stp.readthedocs.io/
+To see the documentation in readthedocs go to: https://group1-2023-bioinfo-stp.readthedocs.io/en/main/
 
 ## Resources
 
