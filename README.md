@@ -1,3 +1,4 @@
+*PanelSearcher is currently in development, we have released v0.1 as a demo version*
 # PanelSearcher
 
 PanelSearcher is a tool which searches for the relevant gene panel for a genomic test to allow the appropriate analysis for each sample.
@@ -5,8 +6,6 @@ Each search returns the genes within the panel along with other relevant informa
 can be created from either the whole gene transcript (MANE Select) or from the exons. Additionally, padding can be added to each side of
 the entity within the BED file. Each search can be associated with a patient and added to a database, creating a record with the panel
 versions.
-
-*PanelSearcher is currently in development, we have released v0.1 as a demo version*
 
 ## Project goal: A tool to manage gene panels for NHS National genomic test directory tests in the laboratory
 - [x] Search for gene panels by R number 
@@ -44,6 +43,13 @@ associated with a transcript.
 https://variantvalidator.org/
 
 *Please note the API queries require an internet connection to be performed*
+
+### Support
+Source code is available at : https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/ 
+
+To inform us of any bugs or to suggest changes you can raise an issue on GitHub : https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/issues 
+
+Please contact Mathew, Sadie or Huma (Group 1) for further support
 
 ## Marking Rubric
 
