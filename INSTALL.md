@@ -33,7 +33,7 @@ To use **pyproject.toml**, run the following commands in the terminal, this will
    pip install .
 ```
 
-*Please not ```python3``` made by required within the command in place of ```python```*
+*Please note ```python3``` made by required within the command in place of ```python```*
 
 Usage: After the required software has been installed, to spin up the Flask App run the following command:
 
@@ -41,8 +41,9 @@ Usage: After the required software has been installed, to spin up the Flask App 
       flask --app app run
   ```
 
-Go to http://localhost:5000 to view the app
-
+* Go to http://localhost:5000 to view the app *
+* OR check your Local app.log file for the URL to view
+* OR check http://127.0.0.1:5000/ (local host Port 5000) to view the app * 
 
 ## Setup within a Docker container
 
@@ -75,6 +76,9 @@ To bring the app down use ```Ctrl+C``` on the terminal where the app was set up.
 
 *Please refer to app.log to help you debug if you are unable to bring up the app, or if a search brings up no results when they are expected*
 
+Due to the Nature of a Flask app, you may be unable to use the back button on your browser. If you need to go back, please use the navigation links on the page.
+This App utilises Several API calls, if you are unable to use certain functions on the app, please wait and retry. This is likely due to the API being overloaded or down.
+
 *Please note the panel search requires an internet connection to be performed*
 
 Please accept accept and store cookies as these are used by the application
@@ -91,7 +95,7 @@ To run testing of the backend code and flask app locally on the command line, na
 ### Continuous integration
 
 Continuous integration (CI) testing allows you to continuously build and test the code to ensure the new commit doesn't introduce errors. 
-CI using GitHub Actions is performed when new commits are pushed to the main or staging branch of the repository, 
+* CI is achevied using GitHub Actions and performed when new commits are pushed to the main or staging branch of the repository,* 
 this automatically runs the tests. Workflows code can be viewed under [testing](./.github/workflows/ci_testing_workflow.yml) CI workflows can be seen by navigating to the actions tab within the GitHub repository of the project. This is Comparative to the CI testing completed with Jenkins. A Report is generated each time and can be viewed as an Artifacts at [https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/actions/workflows/ci_testing_workflow.yml]
 
 ### Code Test Coverage
