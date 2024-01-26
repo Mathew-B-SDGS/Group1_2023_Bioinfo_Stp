@@ -73,9 +73,11 @@ To bring the app down use ```Ctrl+C``` on the terminal where the app was set up.
 
 ## Debugging
 
-*Please refer to app.log to help you debug if you are unable to bring up the app, or a search brings up no results when they are expected*
+*Please refer to app.log to help you debug if you are unable to bring up the app, or if a search brings up no results when they are expected*
 
 *Please note the panel search requires an internet connection to be performed*
+
+Please accept accept and store cookies as these are used by the application
 
 ## Testing 
 ### Pytest
