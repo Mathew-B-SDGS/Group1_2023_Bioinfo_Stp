@@ -22,13 +22,32 @@ Please find links to the User Guide and Installation Guide below:
 
 To see the documentation in readthedocs go to: https://group1-2023-bioinfo-stp.readthedocs.io/
 
+## Resources
+
+External resources are used within this software:
+
+### National Genomic Test Directory Database v5.1:
+Repository of genomic test information
+
+### PanelApp database
+Repository of genomic panels and corresponding entities.
+The API is used within PanelSearcher to search for panel information
+using an R test code.
+https://panelapp.genomicsengland.co.uk/ 
+
+### VariantValidator API
+Used for accurate validation, mapping and formatting of sequence variation descriptors
+The VariantValidator API is used to obtain the genomic coordinates for the gene entities
+associated with a transcript.
+https://variantvalidator.org/
+
+*Please note the API queries require an internet connection to be performed*
 
 ## Marking Rubric
 
 - Find the relevant gene panel for a genomic test to analyse sequence data from a patient appropriately
 - Generate a BED file from a gene panel for genomic test analysis to use as an input to an NGS pipeline tool.
 - Maintains a repository of which tests, gene panels, BED files, reference sequences and versions which have been applied to each patient case so that the laboratory has an accurate record of how analyses were performed
-
 
 ###### License 
 
