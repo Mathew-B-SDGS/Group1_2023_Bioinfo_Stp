@@ -6,6 +6,8 @@ can be created from either the whole gene transcript (MANE Select) or from the e
 the entity within the BED file. Each search can be associated with a patient and added to a database, creating a record with the panel
 versions.
 
+*PanelSearcher is currently in development, we have released v0.1 as a demo version*
+
 ## Project goal: A tool to manage gene panels for NHS National genomic test directory tests in the laboratory
 - [x] Search for gene panels by R number 
 - [x] Download gene panels as BED files

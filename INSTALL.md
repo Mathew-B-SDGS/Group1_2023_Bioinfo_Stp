@@ -101,5 +101,6 @@ this automatically runs the tests. Workflows code can be viewed under [testing](
 PanelSearcher is currently using the National Genomic Test Directory Version 5.1 (updated 1st June 2023). This will need to be updated upon release of the new version
 
 To update the directory, replace the .xlxs file within the resources directory.
+Then go to modules/parser_test_directory.py and update the version.
 
 

@@ -18,23 +18,24 @@
 
 <body>
 
-    <h1>Sample List</h1>
+    <h1>Patient-Panel Entries</h1>
 
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Type</th>
+                <th>Database ID</th>
+                <th>Patient Name</th>
+                <th>Panel Entry</th>
+                <th>Panel Details</th>
             </tr>
         </thead>
         <tbody>
-            {% for s in sample %}
+            {% for p in patients %}
             <tr>
-                <td>{{ s.patient_id }}</td>
-                <td>{{ s.patient_name }}</td>
-                <td>{{ s.which_testcase }}</td>
-                <td><a href="/database/samples/{{ s.patient_id }}">View</a></td>
+                <td>{{ p.patient_id }}</td>
+                <td>{{ p.patient_name }}</td>
+                <td>{{ p.which_testcase }}</td>
+                <td><a href="/database/patients/{{ p.patient_id }}">View</a></td>
             </tr>
             {% endfor %}
         </tbody>

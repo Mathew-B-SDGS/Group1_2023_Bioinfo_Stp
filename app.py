@@ -1,11 +1,10 @@
 from flask import Flask, request, render_template, session, Response, Blueprint
 import os
 from appblueprints import database_blueprint
-from modules import bedmake, parser_test_directory 
+from modules import bedmake, parser_test_directory
 
 """
-## THIS IS THE MAIN APP FILE ##
-
+THIS IS THE MAIN APP FILE
 containing the create_app factory function and all the app routes.
 this project uses the flask framework to create a web app that allows users to
 search for an R number and download a bed file of the genes in the panel
@@ -124,7 +123,8 @@ def test_data():
             session['panel_name'] = panel_name
             session['panel_version'] = panel_version
             session['gene_list'] = [gene.get("gene_data", {}).get(
-                "gene_symbol", "") for gene in panel_information.get("genes", [])]
+                "gene_symbol", "") for gene in panel_information.get("genes",
+                                                                     [])]
 
             # if the api call has worked, render the results.html template
             # with results data
@@ -187,14 +187,14 @@ def download_file():
     # Create bed file from the user inputs
     output_content = obj_for_bed.create_string_bed()
 
-    # Get the user inputs to create a personalised file name 
+    # Get the user inputs to create a personalised file name
     # for the bed file
     bedmake_object = bedmake.RCodeToBedFile(
         r_code, ref_genome='GRCh38')
     panel_info = bedmake_object.get_panel_for_genomic_test()
     panel_name = panel_info['name']
     panel_name = panel_name.replace(' ', '_')
-    panel_version = panel_info['version']   
+    panel_version = panel_info['version']
     try:
         response = Response(
             output_content, content_type='text/plain; charset=utf-8')
