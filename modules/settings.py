@@ -1,5 +1,7 @@
-import logging.config
 
+"""
+Settings file for to configure logging module
+"""
 LOGGING_CONFIG = {
     'version': 1,
     'disable_existing_loggers': False,

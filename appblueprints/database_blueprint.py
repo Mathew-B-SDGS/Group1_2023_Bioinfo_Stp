@@ -75,13 +75,13 @@ class Patient(db.Model):
 class TestType(db.Model):
     """
     table holds TestType details, Includign Rnumber and version'
-    this table also stores a Json of the list of genes in the panel 
+    this table also stores a Json of the list of genes in the panel
     which can be accessed by the panel page
     relationship with TestCase table is one to many
     """
     __tablename__ = "testtype"
     testtype_id: Mapped[int] = mapped_column(
-        Integer, primary_key=True, autoincrement=True, 
+        Integer, primary_key=True, autoincrement=True,
         unique=True, nullable=False)
     testtype_name: Mapped[str] = mapped_column(String(30), nullable=False)
     testtype_version: Mapped[str] = mapped_column(String(30), nullable=True)
@@ -176,6 +176,7 @@ def sample_list():
         db.select(Patient).order_by(Patient.patient_id)).scalars()
     return render_template("sample_list_all.html", sample=samples_list_db)
 
+
 @blueprint_db.route("/samples/<int:sample_id>")
 def sample_list_specific(sample_id):
     """
@@ -235,7 +236,7 @@ def sample_list_specific(sample_id):
 def sample_create():
     """
     create a new sample in the database
-    Url is dependent on the method, if the method is post then the sample 
+    Url is dependent on the method, if the method is post then the sample
     is added to the database
     else the form is rendered to the user to fill in
 
@@ -260,7 +261,7 @@ def sample_create():
 def panels_choice():
     """
     Choose between creating a new patient or selecting an existing one
-    depending on http method the form is rendered or the patient is added 
+    depending on http method the form is rendered or the patient is added
     to the database
 
     input: html form with patient details
@@ -279,7 +280,7 @@ def panels_choice():
             Patient.patient_name).all()
         return render_template("panels_choice.html",
                                patients_list=some_patients)
-    else: #http method is get and the form has not been submitted
+    else:  # http method is get and the form has not been submitted
         some_patients = db.session.query(Patient.patient_name).all()
         return render_template("panels_choice.html",
                                patients_list=some_patients)
@@ -294,7 +295,7 @@ def update_patient_panel():
 
     input: session token with panel details  and patient_id (int) selected
     from the panel page
-    output: dynamic F string with all details of the specific sample 
+    output: dynamic F string with all details of the specific sample
     and session token
     """
     r_number = session['r']
@@ -324,6 +325,6 @@ def update_patient_panel():
         <hr>
         <p> detailed info: </p>
         {session['gene_list']}
-        <br><a href="/">Home</a>
+       <br><a href="/">Home</a>
         <br><a href="/database/panel">View Database</a>
      """

@@ -1,4 +1,3 @@
-import pytest
 import re
 from modules.bedmake import RCodeToBedFile
 
@@ -16,7 +15,7 @@ class TestBedmake():
         self.get_coords = self.bedmake.get_coords_for_bed()
 
     def test_get_panel_for_genomic_test(self):
-        """Check that the correct panel is retrievd from the PanelApp API
+        """Check that the correct panel is retrieved from the PanelApp API
         by checking the panel ID for R207"""
         panel = self.bedmake.get_panel_for_genomic_test()
         assert panel['id'] == 143
@@ -30,7 +29,7 @@ class TestBedmake():
             assert re.match(regex, gene)
 
     def test_get_coords_for_bed(self):
-        """Check the function returns a list of lists each with three 
+        """Check the function returns a list of lists each with three
         elements (chrom, start pos, end pos)
         """
         coordinates = self.get_coords
@@ -52,4 +51,3 @@ class TestBedmake():
         """Check that a string type is output"""
         string_bed = self.bedmake.create_string_bed()
         assert type(string_bed) is str
-
