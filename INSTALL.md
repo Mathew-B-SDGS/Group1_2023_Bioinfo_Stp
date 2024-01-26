@@ -92,6 +92,10 @@ Continuous integration (CI) testing allows you to continuously build and test th
 CI using GitHub Actions is performed when new commits are pushed to the main or staging branch of the repository, 
 this automatically runs the tests. Workflows code can be viewed under [testing](./.github/workflows/ci_testing_workflow.yml) CI workflows can be seen by navigating to the actions tab within the GitHub repository of the project. This is Comparative to the CI testing completed with Jenkins. A Report is generated each time and can be viewed as an Artifacts at [https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/actions/workflows/ci_testing_workflow.yml]
 
+### Code Test Coverage
+
+![Coverage report](/resources/test_code_coverage.PNG)
+
 ## Updating the National Genomic Test Directory
 
 PanelSearcher is currently using the National Genomic Test Directory Version 5.1 (updated 1st June 2023). This will need to be updated upon release of the new version
