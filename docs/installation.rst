@@ -58,3 +58,10 @@ To bring the app down use Ctrl+C on the terminal where the app was set up.
 
 *Please note the panel search requires an internet connection to be performed*
 
+Updating the National Genomic Test Directory
+------
+
+PanelSearcher is currently using the National Genomic Test Directory Version 5.1 (updated 1st June 2023). This will need to be updated upon release of the new version
+
+To update the directory, replace the .xlxs file within the resources directory.
+

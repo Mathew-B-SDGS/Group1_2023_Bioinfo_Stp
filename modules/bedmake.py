@@ -14,7 +14,12 @@ class RCodeToBedFile():
     (GRCh38/37) and returns the list of genes and creates a bedfile
     containing Mane Select transcript coordinates or padded exon
     coordinates.
-    :test_code:
+
+    :test_code: R code in format RXXX 
+    :ref_genome: GRCh38 or GRCh37
+    :include_exon: True or False
+    :padded: True or False
+    :num_bases: any integer
     """
 
     def __init__(
@@ -48,9 +53,11 @@ class RCodeToBedFile():
             panel_endpoint = panel_api_url + self.test_code + "/"
             response = requests.get(panel_endpoint)
             if response.status_code == 200:
+                # if a successful response return the panel information
                 logger.info(f"Successfully retrieved panel for {self.test_code}")
                 return response.json()
             elif response.json()["detail"] == "Not found.":
+                # if not a successful response then raise a warning/error to app.log
                 logger.warning(f"Panel for {self.test_code} not found")
                 raise
             else:
@@ -68,6 +75,7 @@ class RCodeToBedFile():
         gene_name_symbol_list = []
         gene_information = self.get_panel_for_genomic_test()
         for gene in gene_information["genes"]:
+            # extract the hgnc information for each gene
             gene_list.append(gene["gene_data"]["hgnc_id"])
             gene_list.append(gene["gene_data"]["hgnc_symbol"])
             gene_name_symbol_list.append(gene_list)
@@ -76,33 +84,34 @@ class RCodeToBedFile():
 
 
     def get_coords_for_bed(self):
-        """Retrieves the coordinates for the bedfile, if padded_exons=True
-        then exon coordinates will be retrieved elGse Mane Select transcript
-        coordinates will be retrieved.
+        """Retrieves the coordinates for the bedfile using the VariantValidator API,
+        if padded_exons=True then exon coordinates will be retrieved else
+        Mane Select transcript coordinates will be retrieved.
         """
         try:
             gene_list = self.extract_genes_hgnc()
             chrom_start_end = []
             all_gene_coords = []
             transcript_coords = []
-            # Iterate through each gene in the list of genes queried from the
-            # PanelApp API
             for gene in gene_list:
+                # Iterate through each gene in the list of genes queried from the
+                # PanelApp API and query the VV API
                 gene = gene[0]
                 vv_url = (f"https://rest.variantvalidator.org/VariantValidator/"
                           f"tools/gene2transcripts_v2/{gene}/mane/refseq/"
                           f"{self.ref_genome}")
                 response = requests.get(vv_url)
-                # If the response is successful, then retrieve the Mane Select
                 if response.status_code == 200:
+                    # If the response is successful, then retrieve the Mane Select transcript
+                    # for that gene
                     gene_info = response.json()
                     mane_select = (list(gene_info[0]['transcripts'][0]
                                         ['genomic_spans'].keys()))[0]
                     transcript_data = (gene_info[0]['transcripts'][0]
                                        ['genomic_spans'][mane_select])
-                    # If padded_exons=True, then retrieve exon coordinates
-                    # else retrieve Mane Select transcript coordinates
                     if self.include_exon is True:
+                        # If padded_exons=True, then retrieve exon coordinates
+                        # else retrieve Mane Select transcript coordinates
                         for exon in transcript_data['exon_structure']:
                             chrom_start_end.append(gene_info[0]['transcripts'][0]
                                                    ['annotations']['chromosome'])
@@ -132,7 +141,10 @@ class RCodeToBedFile():
         try:
             for gene in self.get_coords_for_bed():
                 for entity in gene:
-                    # the entity is a looping list of 3 elements, so having a for to separate them into chrom, start and end
+                    # the entity is a looping list of 3 elements, so having a 
+                    # for to separate them into chrom, start and end
+                    # establish the start, end coodinates, pad exons 
+                    # with the user input number of bases
                     for i in range(0, len(entity), 3):
                         chrom, start, end = entity[i:i+3]
                     # Ensure start is non-negative
@@ -160,8 +172,6 @@ class RCodeToBedFile():
             logging.error(self.__str__() + f"\nError: {str(e)}")
             raise
 
-    def __repr__(self):
-        return f"RCodeToBedFile(test_code={self.test_code}, ref_genome={self.ref_genome}, padded_exons={self.include_exon})"
-
     def __str__(self):
+        """ Create the format for input into app.py """
         return f"RCodeToBedFile\nTest Code: {self.test_code}\nReference Genome: {self.ref_genome}\nPadded Exons: {self.include_exon}"

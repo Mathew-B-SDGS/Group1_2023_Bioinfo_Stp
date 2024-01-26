@@ -6,7 +6,6 @@ External resources are used within this software:
 **National Genomic Test Directory Database v5.1:**
 Repository of genomic test information
 
-
 **PanelApp database**
 Repository of genomic panels and corresponding entities.
 The API is used within PanelSearcher to search for panel information
