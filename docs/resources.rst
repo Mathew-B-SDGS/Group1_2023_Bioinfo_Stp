@@ -12,7 +12,7 @@ The API is used within PanelSearcher to search for panel information
 using an R test code.
 https://panelapp.genomicsengland.co.uk/ 
 
-**VariantValidator API**
+**VariantValidator**
 Used for accurate validation, mapping and formatting of sequence variation descriptors
 The VariantValidator API is used to obtain the genomic coordinates for the gene entities
 associated with a transcript.
