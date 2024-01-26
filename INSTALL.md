@@ -94,7 +94,7 @@ this automatically runs the tests. CI workflows can be seen by navigating to the
 
 ### Code Test Coverage
 
-![alt text] (https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/resources/test_code_coverage.PNG)
+![Alt text] (/Group1_2023_Bioinfo_Stp/resources/test_code_coverage.PNG)
 
 ## Updating the National Genomic Test Directory
 
