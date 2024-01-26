@@ -20,7 +20,7 @@ Please find links to the User Guide and Installation Guide below:
 ## link to userguide.md :  [User Guide](/USERGUIDE.md)
 ## link to install.md : [Installation Guide](/INSTALL.md)
 
-### Visit Readthedocs at: https://group1-2023-bioinfo-stp.readthedocs.io
+To see the documentation in readthedocs go to: https://group1-2023-bioinfo-stp.readthedocs.io/
 
 
 ## Marking Rubric
