@@ -10,7 +10,7 @@ versions.
 ## Project goal: A tool to manage gene panels for NHS National genomic test directory tests in the laboratory
 - [x] Search for gene panels by R number 
 - [x] Download gene panels as BED files
-- [x] Store patient data within database
+- [x] Store patient-panel data within database
 
 ### Team Members
 - Huma Z
@@ -18,8 +18,8 @@ versions.
 - Mathew B
 
 Please find links to the User Guide and Installation Guide below:
-## link to userguide.md :  [User Guide](/USERGUIDE.md)
-## link to install.md : [Installation Guide](/INSTALL.md)
+## Link to userguide.md :  [User Guide](/USERGUIDE.md)
+## Link to install.md : [Installation Guide](/INSTALL.md)
 
 To see the documentation in readthedocs go to: https://group1-2023-bioinfo-stp.readthedocs.io/
 
@@ -30,13 +30,13 @@ External resources are used within this software:
 ### National Genomic Test Directory Database v5.1:
 Repository of genomic test information
 
-### PanelApp database
+### PanelApp database 
 Repository of genomic panels and corresponding entities.
 The API is used within PanelSearcher to search for panel information
 using an R test code.
 https://panelapp.genomicsengland.co.uk/ 
 
-### VariantValidator API
+### VariantValidator 
 Used for accurate validation, mapping and formatting of sequence variation descriptors
 The VariantValidator API is used to obtain the genomic coordinates for the gene entities
 associated with a transcript.
@@ -44,7 +44,7 @@ https://variantvalidator.org/
 
 *Please note the API queries require an internet connection to be performed*
 
-### Support
+## Support
 Source code is available at : https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/ 
 
 To inform us of any bugs or to suggest changes you can raise an issue on GitHub : https://github.com/Mathew-B-SDGS/Group1_2023_Bioinfo_Stp/issues 
