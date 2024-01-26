@@ -1,4 +1,4 @@
-import sphinx_rtd_theme 
+import sphinx_rtd_theme
 
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
@@ -46,9 +46,9 @@ templates_path = ['ntemplates']
 exclude_patterns = []
 
 # The suffix of source filename
-source_suffix = '.rst' 
+source_suffix = '.rst'
 
-# The master toctree document 
+# The master toctree document
 master_doc = 'index'
 
 # -- Options for HTML output -------------------------------------------------

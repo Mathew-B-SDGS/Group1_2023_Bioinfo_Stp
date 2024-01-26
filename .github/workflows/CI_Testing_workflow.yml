@@ -5,9 +5,9 @@ name: Testing Python application
 
 on:
   push:
-    branches: [ "main", "sprint-4-staging" ]
+    branches: [ "main", "final_staging" ]
   pull_request:
-    branches: [ "main"]
+    branches: [ "main", "final_staging"]
 
 permissions:
   contents: read

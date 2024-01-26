@@ -1,37 +1,34 @@
 from flask import Flask, request, render_template, session, Response, Blueprint
 import os
 from appblueprints import database_blueprint
-from modules import bedmake, parser_test_directory  # importing local modules ./modules/
-# importing local blueprints 
-from appblueprints import database_blueprint
-
+from modules import bedmake, parser_test_directory
 
 """
-## THIS IS THE MAIN APP FILE ##
-
+THIS IS THE MAIN APP FILE
 containing the create_app factory function and all the app routes.
 this project uses the flask framework to create a web app that allows users to
 search for an R number and download a bed file of the genes in the panel
-
-database functionality is in a blueprint in the appblueprints folder. 
+database functionality is in a blueprint in the appblueprints folder.
 """
 
 
 def create_app(test_config=None):
     """
     This is a factory function that creates the app, changed to this as it
-    is more flexible an allows us to change things in the config file 
-    without having to change the code in this file. 
+    is more flexible an allows us to change things in the config file
+    without having to change the code in this file.
     its also better if we want to deploy it anywhere else
     """
 
     # create and configure the app
+    # the secret key for the app, it is used to keep the
+    # client-side sessions secure
+    # set the database path to the project.db file
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='GoldSilverMoonStreamWoodpecker', #this is the secret key for the app, it is used to keep the client-side sessions secure
+        SECRET_KEY='GoldSilverMoonStreamWoodpecker',
     )
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db' # set the database path to the project.db file
-
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
 
     # ensure the instance folder exists
     if test_config is None:
@@ -72,7 +69,7 @@ def create_app(test_config=None):
 
 """
 all app routes are to be found below this comment
-including 
+including:
 - the home page
 - the search page
 - the gene list page
@@ -86,8 +83,8 @@ base = Blueprint('base', __name__, url_prefix='/')
 @base.route("/")
 def hello_world():
     """
-    This is the home page route, it renders the home.html template with 
-    links to search an R number and to go to the database or Auth pages 
+    This is the home page route, it renders the home.html template with
+    links to search an R number and to go to the database or Auth pages
     """
     return render_template("home.html")
 
@@ -126,9 +123,8 @@ def test_data():
             session['panel_name'] = panel_name
             session['panel_version'] = panel_version
             session['gene_list'] = [gene.get("gene_data", {}).get(
-                "gene_symbol", "") for gene in panel_information.get("genes", [])]
-
-            # = panel_information.get( "genes", [{}])[0].get("gene_data", {}).get("gene_symbol", "")
+                "gene_symbol", "") for gene in panel_information.get("genes",
+                                                                     [])]
 
             # if the api call has worked, render the results.html template
             # with results data
@@ -144,8 +140,13 @@ def test_data():
 
 @base.route("/search/genelist", methods=['GET'], endpoint="genelist")
 def gene_list():
+    """This retrieves the data required for the genelist page using
+    the bedmake RcodetoBedfile class
+    """
+
     r_code = session.get('r')
     if r_code is not None:
+        # if the r code exists then render the template to display the results
         bedmake_object = bedmake.RCodeToBedFile(
             r_code, ref_genome='GRCh38')
         panel_info = bedmake_object.get_panel_for_genomic_test()
@@ -162,6 +163,10 @@ def gene_list():
 
 @base.route("/search/download", endpoint="download", methods=['POST'])
 def download_file():
+    """Retrieves the data inputted by the user to input into the bedfile
+    RCodetoBedFile class to specify parameters for the query
+    """
+
     r_code = session.get('r')
     # choose between GRCh38 or GRCh37
     selected_build = request.form['build']
@@ -179,17 +184,17 @@ def download_file():
         padded=selected_padding,
         num_bases=bases)
 
+    # Create bed file from the user inputs
     output_content = obj_for_bed.create_string_bed()
 
+    # Get the user inputs to create a personalised file name
+    # for the bed file
     bedmake_object = bedmake.RCodeToBedFile(
         r_code, ref_genome='GRCh38')
     panel_info = bedmake_object.get_panel_for_genomic_test()
     panel_name = panel_info['name']
     panel_name = panel_name.replace(' ', '_')
     panel_version = panel_info['version']
-
-    # file_content_bytes = file_content_string.encode('utf-8')
-
     try:
         response = Response(
             output_content, content_type='text/plain; charset=utf-8')

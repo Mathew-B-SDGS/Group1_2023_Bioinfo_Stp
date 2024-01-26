@@ -1,3 +1,5 @@
 Change log
 ===================================================
-v1.0 - First release of PanelSearcher
+Future changes can be seen in 
+
+v0.1 - First demo release of PanelSearcher
