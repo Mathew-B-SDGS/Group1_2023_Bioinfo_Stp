@@ -154,16 +154,14 @@ def hello():
       font-family: sans-serif;
     }
     </style>
-    <h1>Database</h1><br>
-    <p>this module is for accessing the Database</p><br>
-    <p>click below to go to view or add samples</p><br>
-    <a href="/database/samples">View All</a><br>
-    <a href="/database/samples/create">Add Sample</a><br>
+    <h1>Patient-Panel Database</h1><br>
+    <p>Click below to go to the database</p><br>
+    <a href="/database/patients">DATABASE</a><br>
     """
 
 
-@blueprint_db.route("/samples")
-def sample_list():
+@blueprint_db.route("/patients")
+def patient_list():
     """
     list all patients in the database in a table format
 
@@ -172,12 +170,12 @@ def sample_list():
     """
     # forms a query object of all patients in the database
     # renders the template passing the query object
-    samples_list_db = db.session.execute(
+    patient_list_db = db.session.execute(
         db.select(Patient).order_by(Patient.patient_id)).scalars()
-    return render_template("sample_list_all.html", sample=samples_list_db)
+    return render_template("patient_list_all.html", patients=patient_list_db)
 
 
-@blueprint_db.route("/samples/<int:sample_id>")
+@blueprint_db.route("/patients/<int:sample_id>")
 def sample_list_specific(sample_id):
     """
     list Specfic samples in the database, including all details
@@ -223,16 +221,16 @@ def sample_list_specific(sample_id):
     # could be scalar or scalars or .all()
 
     return f"""
-    <h1>Detailed List</h1><br>
+    <h1>Patient-Panel entries</h1><br>
     <h3>Laboratory details</h3>{list_test_details3}<hr><br>
     <h3>Patient details</h3>{list_test_details2}<hr><br>
     <h3>Panel details</h3>{list_test_details1}<hr><br>
-    <br><a href="/database/samples">Back</a>
+    <br><a href="/database/patients">Back</a>
     <a href="/">Home</a>
     """
 
 
-@blueprint_db.route("/samples/create", methods=["GET", "POST"])
+@blueprint_db.route("/patients/create", methods=["GET", "POST"])
 def sample_create():
     """
     create a new sample in the database
@@ -326,5 +324,5 @@ def update_patient_panel():
         <p> detailed info: </p>
         {session['gene_list']}
        <br><a href="/">Home</a>
-        <br><a href="/database/panel">View Database</a>
+        <br><a href="/database/">View Database</a>
      """

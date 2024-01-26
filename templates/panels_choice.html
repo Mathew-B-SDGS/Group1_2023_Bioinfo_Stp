@@ -16,10 +16,10 @@
 </head>
 
 <body>
-    <h1>Link a Patient Sample to R-number</h1>
+    <h1>Link a Patient to R-number</h1>
     <hr>
-    <h3>Select Patient Details</h3>
-    <p>Patient Details Can be added to the database Below</p>
+    <h3>Select a Patient </h3>
+    <p><i>If your patient is not yet in the database patient details can be added to the database below</i></p>
     <form method="post" action="{{ url_for('database.update_patient_panel') }}">
         <label for="patientDropdown">Select a patient:</label>
         <select id="patientDropdown" name="patient_selected">
@@ -28,7 +28,7 @@
             {% endfor %}
             <span id="nameError" class="error"></span><br>
         </select>
-        <p>Enter assigned scientist Name</p>
+        <p>Enter your username to associate the patient entry with a user:</p>
         <label for="user">User:</label>
         <input type="text" id="user" name="user" required>
         <span id="userError" class="error"></span><br>
@@ -70,10 +70,8 @@
 
 
 
-
     <hr>
-    <p>patients= {{patients_list}}</p>
-    <h3>Or Create a New Patient</h3>
+    <h3>Add a patient to the database to</h3>
     <form method="POST" action="/database/panel">
         <label for="patient_name">Patient Name:</label>
         <input type="text" id="patient_name" name="patient_name" required>
@@ -82,8 +80,8 @@
         <button type="submit">Create Patient</button>
     </form>
     <br>
-    <p>reload page to view added patients</p>
-    <button><a href="/database/panel">reload</a></button>
+    <p>Reload page to view added patients</p>
+    <button><a href="/database/panel">Reload</a></button>
 
 </body>
 
