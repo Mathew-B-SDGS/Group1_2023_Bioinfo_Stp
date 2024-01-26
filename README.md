@@ -22,26 +22,12 @@ Please find links to the User Guide and Installation Guide below:
 
 ### Visit Readthedocs at: https://group1-2023-bioinfo-stp.readthedocs.io
 
+
 ## Marking Rubric
 
 - Find the relevant gene panel for a genomic test to analyse sequence data from a patient appropriately
 - Generate a BED file from a gene panel for genomic test analysis to use as an input to an NGS pipeline tool.
 - Maintains a repository of which tests, gene panels, BED files, reference sequences and versions which have been applied to each patient case so that the laboratory has an accurate record of how analyses were performed
-
-- [Environment setup and build](#environment-setup-and-build)
-- [Software integrity and code quality](#software-integrity-and-code-quality)
-- [Testing](#testing)
-- [Documentation](#documentation)
-- [Project management](#project-management)
-
-#### Environment setup and build
-a. Requirments.txt file is included in the repository in addition to code being stored within modules outside of the root directory. commands to install the required software are included in the [Installation Guide](/INSTALL.md)
-b. A working pyproject.toml has been included. within  requirements.txt all software is version specified. (Conda has not been used)
-c. A working Dockerfile has been included, instructions to run the app within a docker container are included in the [Installation Guide](/INSTALL.md)
-
-#### Software integrity and code quality
-a. 
-
 
 
 ###### License 

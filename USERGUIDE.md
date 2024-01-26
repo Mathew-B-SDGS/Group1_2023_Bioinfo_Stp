@@ -2,6 +2,8 @@
 
 Home page: [README.md](/README.md)
 
+For detailed documentation go to: https://group1-2023-bioinfo-stp.readthedocs.io/
+
 ==============================
 
 ## Using PanelSearcher
