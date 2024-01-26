@@ -26,7 +26,7 @@ def client(app):
 def test_home_page(client):
     """Test that the home page title appears when you load the app"""
     response = client.get("/")
-    assert b"<h1>Welcome to PanelSearcher v1.0!</h1>" in response.data
+    assert b"<h1>Welcome to PanelSearcher v0.1!</h1>" in response.data
 
 
 def test_panel_search(client):
