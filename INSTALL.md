@@ -94,7 +94,18 @@ this automatically runs the tests. Workflows code can be viewed under [testing](
 
 ### Code Test Coverage
 
-![Coverage report](/resources/test_code_coverage.PNG)
+Name                                  Stmts   Miss  Cover
+---------------------------------------------------------
+app.py                                   91     42    54%
+appblueprints/database_blueprint.py     101     39    61%
+modules/bedmake.py                      102     25    75%
+modules/parser_test_directory.py          7      0   100%
+modules/settings.py                       2      0   100%
+tests/__init__.py                         1      0   100%
+tests/conftest.py                        67      0   100%
+tests/test_bedmake.py                    31      0   100%
+---------------------------------------------------------
+TOTAL                                   402    106    74%
 
 ## Updating the National Genomic Test Directory
 

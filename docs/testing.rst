@@ -14,6 +14,15 @@ this automatically runs the tests. CI workflows can be seen by navigating to the
 Code Test Coverage
 -------
 
-.. image:: /resources/test_code_coverage.PNG
-    :alt: Code coverage
-
+Name                                  Stmts   Miss  Cover
+---------------------------------------------------------
+app.py                                   91     42    54%
+appblueprints/database_blueprint.py     101     39    61%
+modules/bedmake.py                      102     25    75%
+modules/parser_test_directory.py          7      0   100%
+modules/settings.py                       2      0   100%
+tests/__init__.py                         1      0   100%
+tests/conftest.py                        67      0   100%
+tests/test_bedmake.py                    31      0   100%
+---------------------------------------------------------
+TOTAL                                   402    106    74%
