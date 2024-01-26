@@ -19,3 +19,16 @@ fill in the form with patients Name and ID number and click 'Create Patient' but
 
 - Selecting an existing Patinet
 Once the Patient details are in the database, you can link the patient to a panel by selecting the patient from the drop down menu, entering your scientist credentials, and clicking 'Link to Patient' button. This will link the panel to the patient and save the link in the database. Redirecting you to the panel information page. where you can confirm the link has been made.
+
+this Database is tested using pytest. To run the tests, run the following command from the root directory of the project:
+``` pytest test/*.py ```
+
+## Database Structure
+The database is made up of 3 tables: 
+- Patients
+- TestCases
+- TestPanels
+
+the Database is has been normalised to 3rd normal form. through the use of foreign keys and relationships.
+the Test Case Table ensures that each test case is unique, and that each test case can only be linked to one patient.
+But a patient can have many test cases.
